@@ -1,0 +1,17 @@
+<%= turbo_frame_tag :order_review do %>
+  <div class="text-center mb-4">
+    <p class="text-xl text-green-600 font-normal leading-normal">
+      How was your experience at <%= order.organization.name %>?
+    </p>
+  </div>
+  <div class="text-center">
+    <%= link_to order_order_user_feedback_path(order, order_user),
+      data: { turbo_frame: :modal }, class: 'btn btn-lg btn-green w-full' do %>
+      <%= icon(
+        Rails.application.config.fa_style,
+        'stars'
+      ) %>
+      Leave your feedback
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,7 @@
+<%= turbo_stream.prepend(:qr_codes, partial: 'organizations/qr_codes/qr_code', locals: { qr_code: }) %>
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'QR code was successfully created.' } }
+) %>
+<%= turbo_stream.update(:modal, '') %>

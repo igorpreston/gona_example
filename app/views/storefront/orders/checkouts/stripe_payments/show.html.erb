@@ -1,0 +1,50 @@
+<%= turbo_frame_tag :order_payment do %>
+  <div class="block">
+    <div class="relative">
+      <form
+        id="payment-form"
+        data-controller="stripe"
+        data-stripe-publishable-key="<%= ENV.fetch('STRIPE_PUBLIC', nil) %>"
+        data-stripe-client-secret="<%= payment_intent&.client_secret %>"
+        data-stripe-account="<%= payment&.organization&.stripe_account_id %>"
+        data-return-url="<%= order_order_user_url(@current_order, @current_order_user) %>"
+      >
+        <div class="grid grid-cols-1 gap-6">
+          <div id="payment-message" class="hidden bg-red-100 text-red-900 leading-normal font-normal text-sm ring-1 ring-red-200 p-4 text-center rounded"></div>
+          <div class="col">
+            <div id="payment-element"></div>
+          </div>
+          <div class="col">
+            <button id="submit" class="btn btn-primary btn-md rounded-full w-full">
+              <div class="spinner hidden" id="spinner">Processing...</div>
+              <span id="button-text">Confirm <%= payment.amount&.format %></span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="block mt-2">
+    <p class="text-gray-500 text-xs leading-normal font-normal">
+      By proceeding to payment, you have reviewed and agree to the
+      <%= link_to ENV.fetch('GONA_TERMS', nil), target: :_blank, class: 'link' do %>
+        Terms of Use
+        <%= icon(
+          Rails.application.config.fa_style,
+          'external-link-alt',
+          class: 'ml-1'
+        ) %>
+      <% end %>
+      and acknowledge the
+      <%= link_to ENV.fetch('GONA_PRIVACY', nil), target: :_blank, class: 'link' do %>
+        Privacy Notice
+        <%= icon(
+          Rails.application.config.fa_style,
+          'external-link-alt',
+          class: 'ml-1'
+        ) %>
+      <% end %>.
+      You are at least 18 years of age.
+    </p>
+  </div>
+<% end %>

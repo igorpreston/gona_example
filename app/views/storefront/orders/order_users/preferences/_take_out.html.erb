@@ -1,0 +1,47 @@
+<div class="mb-6">
+  <p class="text-base text-gray-900 font-semibold leading-normal">
+    Pickup
+  </p>
+</div>
+<div class="grid grid-cols-1 gap-6">
+  <%# Location %>
+  <div class="col flex items-start">
+    <span class="shrink-0 w-8 text-center mr-3">
+      <%= icon(
+        Rails.application.config.fa_style,
+        'route',
+        class: 'text-gray-500 text-base'
+      ) %>
+    </span>
+    <div class="w-full">
+      <p class="text-gray-900 leading-normal font-medium text-base">
+        <%= order.organization&.name %>
+      </p>
+      <%= link_to order.location&.address&.google_maps_url, target: :_blank, class: 'block text-gray-500 hover:text-gray-900 leading-normal font-normal text-base mt-1 underline transition' do %>
+        <%= order.location&.address&.to_s %>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Location %>
+  <%# Take Out Instractions %>
+  <% if order.location&.pickup_instructions&.present? %>
+    <div class="col flex items-start">
+      <span class="shrink-0 w-8 text-center mr-3">
+        <%= icon(
+        Rails.application.config.fa_style,
+        'note',
+        class: 'text-gray-500 text-base'
+      ) %>
+      </span>
+      <div class="w-full">
+        <p class="text-gray-900 leading-normal font-medium text-base">
+          Instructions
+        </p>
+        <p class="text-gray-500 leading-normal font-normal text-base mt-1">
+          <%= order.location&.pickup_instructions %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+  <%# End of Take Out instractions %>
+</div>

@@ -1,0 +1,9 @@
+<%= turbo_frame_tag :location_tables do %>
+  <div class="block">
+    <%= render partial: 'locations/tables/tables', locals: { location:, tables: @tables } %>
+  </div>
+
+  <div class="mt-6">
+    <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+  </div>
+<% end %>

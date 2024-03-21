@@ -1,0 +1,178 @@
+<% content_for :title, @location.name %>
+
+<%# Heading %>
+<div class="block m-intro">
+  <div class="content">
+    <%# Header %>
+    <div class="flex">
+      <%# Heading %>
+      <div class="w-full flex-grow flex">
+        <%# Back button %>
+        <div class="mr-4 shrink-0">
+          <%= link_to locations_path, class: 'btn' do %>
+            <%= icon(Rails.application.config.fa_style, "arrow-left") %>
+          <% end %>
+        </div>
+        <%# End of Back button %>
+
+        <%# Title %>
+        <div class="flex flex-col">
+          <h1 class="text-2xl font-semibold text-gray-900">
+            <%= location.name %>
+
+            <% if location.integration? %>
+              <span class="ml-2">
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'grid-2-plus',
+                  class: 'text-blue-600'
+                ) %>
+              </span>
+            <% end %>
+          </h1>
+          <div class="flex items-center">
+            <% if location.open? %>
+              <span class="bg-green-500 h-3 w-3 relative block mr-2 rounded-full"></span>
+              <p class="text-gray-500 leading-normal font-normal text-sm">Open</p>
+            <% else %>
+              <span class="bg-gray-500 h-3 w-3 relative block mr-2 rounded-full"></span>
+              <p class="text-gray-500 leading-normal font-normal text-sm">Closed</p>
+            <% end %>
+          </div>
+        </div>
+        <%# End of Title %>
+      </div>
+      <%# End of Heading %>
+      <%# Header actions %>
+      <div class="shrink-0">
+        <div class="flex items-center flex-wrap -m-2">
+          <span class="shrink-0 p-2 relative" data-controller="dropdown">
+            <%= button_tag class: 'btn btn-secondary', data: {
+              action: 'dropdown#toggle click@window->dropdown#hide'
+            } do %>
+              Actions
+              <%= icon(Rails.application.config.fa_style, 'angle-down', class: 'ml-2') %>
+            <% end %>
+
+            <div
+              data-dropdown-target="menu"
+              class="hidden transition transform origin-top-right absolute right-0 z-20"
+              data-transition-enter-from="opacity-0 scale-95"
+              data-transition-enter-to="opacity-100 scale-100"
+              data-transition-leave-from="opacity-100 scale-100"
+              data-transition-leave-to="opacity-0 scale-95"
+            >
+              <div class="absolute right-0 top-2 w-44 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1" role="none">
+                  <ul class="grid grid-cols-1">
+                    <li class="p-1">
+                      <%= active_link_to location_url(location, subdomain: :order), target: :_blank, class: 'text-gray-900 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' do %>
+                        <%= icon(Rails.application.config.fa_style, 'arrow-up-right-from-square', class: 'mr-1') %>
+                        Storefront
+                      <% end %>
+                    </li>
+                    <% if location&.qr_code.present? %>
+                      <li class="p-1">
+                        <%= active_link_to qr_code_path(location&.qr_code), data: { turbo_frame: :modal }, class: 'text-gray-900 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' do %>
+                          <%= icon(Rails.application.config.fa_style, 'qrcode', class: 'mr-1') %>
+                          QR Code
+                        <% end %>
+                      </li>
+                    <% end %>
+                    <li class="p-1">
+                      <%= active_link_to edit_location_path(location), class: 'text-gray-900 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' do %>
+                        <%= icon(Rails.application.config.fa_style, 'pencil', class: 'mr-1') %>
+                        Edit
+                      <% end %>
+                    </li>
+                    <li class="p-1">
+                      <%= button_to location_path(location), method: :delete, class: 'text-red-600 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' do %>
+                        <%= icon(Rails.application.config.fa_style, 'trash', class: 'mr-1') %>
+                        Delete
+                      <% end %>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </span>
+        </div>
+      </div>
+      <%# End of Header actions %>
+    </div>
+    <%# End of Header %>
+  </div>
+</div>
+<%# End of Heading %>
+
+
+<%# Body %>
+<div class="block">
+  <div class="content">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+      <%# Main %>
+      <div class="lg:col-span-8">
+        <div class="card">
+          <div class="card-header">
+            <div class="grow shrink w-full">
+              <p class="text-base text-gray-900 leading-normal font-medium">
+                <%= pluralize(location.tables_count, 'table') %>
+              </p>
+            </div>
+            <div class="shrink-0 ml-4">
+              <%= link_to 'Add table', new_location_table_path(location), class: 'text-blue-600 leading-normal hover:text-blue-500 transition text-base font-normal', data: { turbo_frame: :modal } %>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="grid grid-cols-1 gap-4">
+              <%= turbo_frame_tag :location_tables, src: location_tables_path(location), lazy: true do %>
+                <%= render partial: 'components/loading' %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%# Main %>
+      <%# Sidebar %>
+      <div class="lg:col-span-4 grid grid-cols-1 gap-6">
+        <%# Schedule %>
+        <div class="card">
+          <div class="card-header">
+            <div class="flex-grow">
+              <p class="text-base text-gray-900 leading-normal font-medium">
+                Schedule
+              </p>
+            </div>
+            <div class="ml-4 shrink-0">
+              <%= link_to 'Edit', edit_location_path(location), class: 'link' %>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="grid grid-cols-1 gap-4">
+              <%= render partial: 'locations/schedule', locals: { location: } %>
+            </div>
+          </div>
+        </div>
+        <%# End of Schedule %>
+        <%# Schedule %>
+        <div class="card">
+          <div class="card-header">
+            <div class="flex-grow">
+              <p class="text-base text-gray-900 leading-normal font-medium">
+                <%= pluralize(location.menus_count, 'menu') %>
+              </p>
+            </div>
+          </div>
+          <div class="card-body">
+            <%= turbo_frame_tag :location_menus, src: location_menus_path(location), lazy: true do %>
+              <%= render partial: 'components/loading' %>
+            <% end %>
+          </div>
+        </div>
+        <%# End of Schedule %>
+      </div>
+      <%# End of Sidebar %>
+    </div>
+  </div>
+</div>
+<%# End of Body %>

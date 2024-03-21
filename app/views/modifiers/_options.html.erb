@@ -1,0 +1,27 @@
+<%= turbo_frame_tag :options do %>
+  <div class="card">
+    <div class="card-body">
+
+      <% if options.size.positive? %>
+        <div
+          class="grid grid-cols-1 gap-4 md:gap-6"
+          data-controller="sortable"
+          data-sortable-handle-value="#tickleMe"
+          data-sortable-animation-value="150"
+        >
+          <%= render partial: 'modifiers/option', collection: options, locals: { modifier: } %>
+        </div>
+      <% else %>
+        <%= render partial: 'components/empty_state', locals: {
+          icon: 'inbox',
+          title: 'No options',
+          description: 'Add options to this modifier to make it available for your customers.',
+          buttons: [
+            link_to('Add first option', new_modifier_option_path(modifier), class: 'btn btn-primary', data: { turbo_frame: :modal })
+          ]
+        } %>
+      <% end %>
+
+    </div>
+  </div>
+<% end %>

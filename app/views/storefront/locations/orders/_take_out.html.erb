@@ -1,0 +1,20 @@
+<%= turbo_frame_tag :order do %>
+  <% if order.added_items_count.positive? %>
+    <div class="fixed bottom-0 right-0 left-0 md:left-auto pointer-events-none z-10">
+      <div class="md:content">
+        <%= link_to order_checkout_path(order),
+          data: { turbo: false },
+          class:
+          'pointer-events-auto select-none md:rounded-full bg-gray-900 md:mb-4 shadow-lg mx-auto cursor-pointer flex text-center justify-center items-center hover:bg-gray-800 transition' do
+        %>
+          <div class="py-3 md:py-4 px-6 md:px-8 text-center text-white font-normal text-lg">
+            <span class="rounded-full h-[40px] min-w-[40px] inline-flex items-center justify-center bg-white mr-1 text-gray-900 py-2 px-3">
+              <%= order.items_count %>
+            </span>
+            • View order • <%= Money.new(order.subtotal, location.currency).format %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

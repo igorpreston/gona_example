@@ -1,0 +1,36 @@
+<div class="relative rounded overflow-hidden">
+  <div class="flex items-start">
+    <span class="shrink-0 mr-4 text-xl leading-normal">
+      <% if task.completed? %>
+        <%= button_to onboardings_incomplete_path(task), method: :patch, data: { turbo: false } do %>
+          <%= icon(Rails.application.config.fa_style, 'circle-check', class: 'text-green-600') %>
+        <% end %>
+      <% else %>
+        <%= button_to onboardings_complete_path(task), method: :patch, data: { turbo: false } do %>
+          <%= icon(Rails.application.config.fa_style, 'circle-dashed', class: 'text-gray-500') %>
+        <% end %>
+      <% end %>
+    </span>
+    <div class="shrink">
+      <p class="mt-1 text-base text-gray-900 leading-normal font-normal">
+        <%= t("dashboard.onboarding.task.#{task.category}.#{task.template}.title") %>
+      </p>
+
+      <% unless task.completed? %>
+        <div class="mt-2">
+          <p class="text-sm text-gray-500 leading-normal font-normal">
+            <%= t("dashboard.onboarding.task.#{task.category}.#{task.template}.description") %>
+          </p>
+
+          <div class="mt-4">
+            <%= link_to t("dashboard.onboarding.task.#{task.category}.#{task.template}.cta"),
+              locations_path,
+              class: 'btn btn-primary',
+              data: { turbo: false }
+            %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+en:
+  trackings:
+    tracking_header:
+      submitted: Order submitted 🎉
+      in_progress: ⏰ Preparing your order...
+      ready: Ready for pickup!
+      completed: Order completed

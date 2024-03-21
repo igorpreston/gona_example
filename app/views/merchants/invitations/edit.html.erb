@@ -1,0 +1,27 @@
+<%= content_for :heading, 'Welcome to GONA' %>
+<%= content_for :subheading do %>
+  Great things are about to happen!
+<% end %>
+
+<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put, class: 'grid grid-cols-1 gap-4' }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= f.hidden_field :invitation_token, readonly: true %>
+
+  <% if f.object.class.require_password_on_accepting %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <%= f.text_field :first_name, autocomplete: 'given-name', required: true, class: 'input-auth', placeholder: t('devise.registrations.new.first_name_placeholder') %>
+      </div>
+      <div>
+        <%= f.text_field :last_name, autocomplete: 'family-name', required: true, class: 'input-auth', placeholder: t('devise.registrations.new.last_name_placeholder') %>
+      </div>
+    </div>
+    <div>
+      <%= f.password_field :password, autocomplete: 'given-name', required: true, class: 'input-auth', placeholder: 'New passowrd' %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.submit t('devise.registrations.new.submit'), class: 'flex w-full justify-center rounded border border-transparent bg-blue-600 p-3 sm:p-4 text-md font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 cursor-pointer', data: { turbo: false } %>
+  </div>
+<% end %>

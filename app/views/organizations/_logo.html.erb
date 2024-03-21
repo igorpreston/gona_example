@@ -1,0 +1,10 @@
+<span class="h-full w-full inline-flex rounded items-center justify-center">
+  <% if organization.logo.attached? %>
+    <%= cl_image_tag(
+      organization.logo.key,
+      class: 'w-full h-full object-cover'
+    ) %>
+  <% else %>
+    <%= icon(Rails.application.config.fa_style, 'store', class: 'text-gray-500') %>
+  <% end %>
+</span>

@@ -1,0 +1,11 @@
+<%= turbo_stream.update(
+  :menu_categories,
+  partial: 'menus/menu_categories',
+  locals: { menu:, menu_categories: menu.menu_categories }
+) %>
+<%= turbo_stream.remove(category.prefix_id) %>
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'Category added to menu' } }
+) %>

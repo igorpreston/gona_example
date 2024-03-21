@@ -1,0 +1,26 @@
+<%= turbo_frame_tag :orders_locations do %>
+  <ul class="grid grid-cols-1 gap-1 p-1">
+    <li class="relative">
+        <%= active_link_to 'All locations',
+          orders_path,
+          class: 'block w-full text-base text-gray-900 font-normal rounded-lg truncate p-2',
+          class_active: 'bg-gray-100',
+          class_inactive: 'bg-white hover:bg-gray-100 focus:bg-gray-100 transition',
+          active: :exact,
+          data: { turbo: false }
+        %>
+      </li>
+    <% locations.each do |location| %>
+      <li class="relative">
+        <%= active_link_to location.name,
+          orders_path(location_id: location.id, location_name: location.name),
+          class: 'block w-full text-base text-gray-900 font-normal rounded-lg truncate p-2',
+          class_active: 'bg-gray-100',
+          class_inactive: 'bg-white hover:bg-gray-100 focus:bg-gray-100 transition',
+          active: :exact,
+          data: { turbo: false }
+        %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

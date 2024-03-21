@@ -1,0 +1,152 @@
+<% content_for :title, 'Public business information' %>
+<% content_for :heading, 'Public business information' %>
+<% content_for :subheading, 'This information helps customers recognize your business and understand your products and terms of service. Your support information may be visible in payment statements, invoices, and receipts.' %>
+
+<%= render partial: 'organizations/header', locals: { back_url: edit_organization_path } %>
+
+<div class="block mt-8">
+  <div class="content-md">
+    <div class="grid grid-cols-1 gap-8">
+      <%# Brand %>
+      <div class="card">
+        <div class="card-header">
+          <div class="w-full">
+            <p class="text-base text-gray-900 leading-normal font-medium">
+              Branding
+            </p>
+          </div>
+          <div class="shrink-0 ml-4 md:ml-6">
+            <%= link_to 'Edit', edit_organization_general_path, class: 'text-base text-blue-600 hover:text-blue-500 transition', data: { turbo_frame: :logos } %>
+          </div>
+        </div>
+
+        <%# body %>
+        <div class="card-body">
+          <%= turbo_frame_tag :logos do %>
+            <div class="grid grid-cols-1 gap-4 md:gap-6">
+              <div class="col">
+                <div class="mb-2">
+                  <p class="label">
+                    Square logo
+                  </p>
+                </div>
+                <div class="block">
+                  <div class="relative">
+                    <span class="flex items-center justify-center w-32 h-32 bg-gray-100 text-3xl text-gray-500 leading-normal ring-1 ring-gray-200 relative">
+                      <%= render partial: 'organizations/logo', locals: { organization: current_tenant } %>
+                    </span>
+                  </div>
+
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500 leading-normal font-normal">
+                      Used for most common logo applications.
+                    </p>
+                    <p class="text-sm text-gray-500 leading-normal font-normal mt-0.5">
+                      HEIC, WEBP, SVG, PNG, or JPG. Recommended width: 512 pixels minimum.
+                    </p>
+                  </div>
+
+                  <% if current_tenant.logo&.analyze && (current_tenant.logo&.metadata[:width] || current_tenant.logo&.metadata[:height]) < 512 %>
+                    <div class="mt-4">
+                      <p class="text-sm leading-normal font-normal">
+                        <%= icon(Rails.application.config.fa_style, 'info-circle', class: 'mr-2') %>
+                        Your logo is less than 512 px wide or 512 px high and may appear blurry.
+                      </p>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="mb-2">
+                  <p class="label">
+                    Cover photo
+                  </p>
+                </div>
+                <div class="block">
+                  <div class="relative">
+                    <span class="flex items-center justify-center w-full max-w-[500px] h-[240px] bg-gray-100 text-3xl text-gray-500 leading-normal ring-1 ring-gray-200 relative">
+                      <%= render partial: 'organizations/cover_image', locals: { organization: current_tenant } %>
+                    </span>
+                  </div>
+
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500 leading-normal font-normal">
+                      Key image that shows off your brand in profile pages and apps
+                    </p>
+                    <p class="text-sm text-gray-500 leading-normal font-normal mt-0.5">
+                      HEIC, WEBP, SVG, PNG, or JPG. Recommended: 1920×1080 pixels minimum.
+                    </p>
+                  </div>
+
+                  <% if current_tenant.cover_image&.analyze && (current_tenant.cover_image&.metadata[:width] < 1920 || current_tenant.cover_image&.metadata[:height] < 1080) %>
+                    <div class="mt-4">
+                      <p class="text-sm leading-normal font-normal">
+                        <%= icon(Rails.application.config.fa_style, 'info-circle', class: 'mr-2') %>
+                        Your cover image is less than 1920×1080 px and may not be used by some apps and channels
+                      </p>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <%# End of Brand %>
+
+      <%# Public information %>
+      <div class="card">
+        <div class="card-header">
+          <div class="w-full">
+            <p class="text-base text-gray-900 leading-normal font-medium">
+              Public information
+            </p>
+          </div>
+          <div class="shrink-0 ml-4 md:ml-6">
+            <%= link_to 'Edit', edit_organization_general_path, class: 'text-base text-blue-600 hover:text-blue-500 transition', data: { turbo_frame: :public_information } %>
+          </div>
+        </div>
+
+        <%# body %>
+        <div class="card-body">
+          <%= turbo_frame_tag :public_information do %>
+            <div class="grid grid-cols-1 gap-4 md:gap-6">
+              <div class="col grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div class="col">
+                  <div class="mb-2">
+                    <p class="label">
+                      Brand name
+                    </p>
+                  </div>
+                  <div class="block">
+                    <p class="text-base text-gray-900 leading-normal font-medium">
+                      <%= current_tenant.name ? current_tenant.name : '' %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="mb-2">
+                  <p class="label">
+                    Description
+                  </p>
+                </div>
+                <div class="block">
+                  <p class="text-base text-gray-900 leading-normal font-medium">
+                    <%= current_tenant.description ? current_tenant.description : '' %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <%# End of Billing information %>
+    </div>
+
+
+
+  </div>
+</div>

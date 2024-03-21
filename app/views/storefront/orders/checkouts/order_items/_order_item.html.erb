@@ -1,0 +1,42 @@
+<%= turbo_frame_tag order_item.prefix_id do %>
+  <div class="relative">
+    <%= link_to edit_order_order_item_path(order_item.order, order_item), data: { turbo_frame: :modal }, class: 'block py-2' do %>
+      <div class="flex justify-between w-full">
+        <div class="shrink-0 mr-3">
+          <div class="min-h-[28px] min-w-[28px] flex items-center justify-center bg-gray-100 text-gray-900 text-xs font-normal rounded p-0.5">
+            <%= order_item.quantity %>
+          </div>
+        </div>
+        <div class="grow shrink mt-1">
+          <p class="text-sm text-gray-900 leading-normal font-normal">
+            <%= order_item.item.name %>
+          </p>
+          <% if order_item.modifiers_count.positive? %>
+            <div class="grid grid-cols-1 gap-0.5">
+              <% order_item.applied_options.each do |applied_option| %>
+                <p class="text-gray-500 leading-normal font-normal text-sm">
+                  <%= icon(
+                    Rails.application.config.fa_style,
+                    'arrow-turn-down-right',
+                    class: 'mr-1'
+                  ) %>
+                  <%= applied_option.item&.name %> (<%= applied_option.item&.price&.format %>)
+                </p>
+              <% end %>
+            </div>
+          <% end %>
+          <% if order_item.note.present? %>
+            <p class="text-sm text-gray-500 leading-normal font-normal italic mt-2">
+              "<%= order_item.note&.body %>"
+            </p>
+          <% end %>
+        </div>
+        <div class="shrink-0 ml-4 mt-1">
+          <p class="text-gray-900 leading-normal font-normal text-sm">
+            <%= Money.new(order_item.total_with_options_cents, order_item.currency.upcase).format %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

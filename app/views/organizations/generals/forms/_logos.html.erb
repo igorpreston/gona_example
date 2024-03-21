@@ -1,0 +1,50 @@
+<%= form_with model: organization, url: organization_general_path, method: :put, local: true do |f| %>
+  <div class="grid grid-cols-1 gap-4 md:gap-6">
+    <div class="col">
+      <div class="flex items-center">
+        <div class="mr-4">
+          <%= f.label :logo, class: 'inline-flex justify-center text-center items-center h-20 w-20 md:h-24 md:w-24 bg-gray-100 rounded overflow-hidden text-2xl relative' do %>
+            <%= render partial: 'organizations/logo', locals: { organization: current_tenant } %>
+          <% end %>
+        </div>
+        <div>
+          <%= f.file_field :logo, class: 'block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-100 file:text-blue-800 hover:file:bg-blue-500 hover:file:text-white file:cursor-pointer' %>
+        </div>
+      </div>
+      <div class="mt-2">
+        <p class="tip">
+          Used by GONA and some social media channels. Cropped into a circle. May be cropped to a square.
+        </p>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="flex items-center">
+        <div class="mr-4">
+          <%= f.label :cover_image, class: 'inline-flex justify-center text-center items-center h-20 w-20 md:h-24 md:w-24 bg-gray-100 rounded overflow-hidden text-2xl relative' do %>
+            <%= render partial: 'organizations/cover_image', locals: { organization: current_tenant } %>
+          <% end %>
+        </div>
+        <div>
+          <%= f.file_field :cover_image, class: 'block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-100 file:text-blue-800 hover:file:bg-blue-500 hover:file:text-white file:cursor-pointer' %>
+        </div>
+      </div>
+      <div class="mt-2">
+        <p class="tip">
+          Used by GONA and some social media channels. Cropped into a circle. May be cropped to a square.
+        </p>
+      </div>
+    </div>
+
+    <div class="col flex w-full items-center justify-end">
+      <span class="shrink-0 ml-4">
+        <%= link_to 'Cancel', organization_general_path, class: 'text-sm text-gray-500 leading-normal font-normal hover:text-gray-900 transition' %>
+      </span>
+      <span class="shrink-0 ml-4">
+        <%= submit_tag "Save",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Uploading...".html_safe } }
+        %>
+      </span>
+    </div>
+  </div>
+<% end %>

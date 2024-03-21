@@ -1,0 +1,36 @@
+<%= turbo_frame_tag :location_menu do %>
+  <%# Categories %>
+  <div class="sticky top-0 z-20 pt-2 pointer-events-none">
+    <div class="content">
+      <div class="flex justify-between no-scrollbar bg-gray-100 rounded-full border border-gray-100 pointer-events-auto">
+        <ul class="flex overflow-x-auto shrink grow w-full" data-controller="menu">
+          <% menu.menu_categories.includes(:category).each do |menu_category| %>
+            <li class="h-full flex items-center shrink-0 grow-0">
+              <%= link_to "##{menu_category.prefix_id}",
+                class: 'text-gray-500 py-2 px-4 rounded-full flex items-center justify-center transition',
+                data: {
+                  menu_target: 'tab',
+                  category: menu_category.prefix_id,
+                  controller: 'scroll-to',
+                  scroll_to_offset_value: '70',
+                  scroll_to_behavior_value: 'smooth'
+                } do
+              %>
+                <%= menu_category.category_name %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <%# End of Categories %>
+
+  <%# Menu %>
+  <div class="block mt-8">
+    <div class="content">
+      <%= render partial: 'storefront/locations/menus/menu', locals: { menu:, order: @order } %>
+    </div>
+  </div>
+  <%# End of Menu %>
+<% end %>

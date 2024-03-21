@@ -1,0 +1,20 @@
+<% if item.metadata.vegan? %>
+  <%= icon(
+    Rails.application.config.fa_style, Item::Metadata::ICONS[:vegan], class: 'ml-2 text-green-600'
+  ) %>
+<% end %>
+<% if item.metadata.vegetarian? %>
+  <%= icon(
+    Rails.application.config.fa_style, Item::Metadata::ICONS[:vegetarian], class: 'ml-2 text-pink-600'
+  ) %>
+<% end %>
+<% if item.metadata.gluten_free? %>
+  <%= icon(
+    Rails.application.config.fa_style, Item::Metadata::ICONS[:gluten_free], class: 'ml-2 text-yellow-600'
+  ) %>
+<% end %>
+<% if item.metadata.spicy? %>
+  <%= icon(
+    Rails.application.config.fa_style, Item::Metadata::ICONS[:spicy], class: 'ml-2 text-red-600'
+  ) %>
+<% end %>

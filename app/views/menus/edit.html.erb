@@ -1,0 +1,12 @@
+<% content_for :title, menu.name %>
+<% content_for :heading, menu.name %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render 'menus/form', menu: %>
+  </div>
+<% end %>

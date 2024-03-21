@@ -1,0 +1,46 @@
+<% content_for :title, 'New QR Code' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[340px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= form_with model: qr_code, url: organization_qr_codes_path do |f| %>
+      <div class="grid grid-cols-1 gap-4 md:gap-6">
+        <div class="col">
+          <div class="mb-2">
+            <%= f.label :name, 'Name' %>
+          </div>
+          <div class="block">
+            <%= f.text_field :name, class: 'input', autofocus: true %>
+          </div>
+          <div class="mt-1">
+            <p class="tip">
+              The name of the QR code is used to identify it in the list of QR codes. It is not visible to your customers.
+            </p>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="mb-2">
+            <%= f.label :location_id, 'Location' %>
+          </div>
+          <div class="block">
+            <%= f.select :location_id,
+              options_from_collection_for_select(current_tenant.locations, :id, :name), {}, class: "input"
+            %>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="block">
+            <%= submit_tag "Create",
+              { class: 'btn btn-primary w-full', data: { turbo_submits_with: "Generating...".html_safe } }
+            %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

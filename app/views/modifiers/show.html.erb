@@ -1,0 +1,127 @@
+<% content_for :title, 'Modifier' %>
+<% content_for :heading, modifier.name %>
+<% content_for :subheading, pluralize(modifier.options.count, 'option') %>
+<% buttons = [
+  link_to(new_modifier_option_path(modifier), class: 'btn btn-primary', data: { turbo_frame: :modal }) do
+    icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') + 'Add new option'
+  end,
+  link_to(edit_modifier_path(modifier), class: 'btn btn-secondary', data: { turbo_frame: :modal }) do
+    icon(Rails.application.config.fa_style, 'pen', class: 'mr-2') + 'Edit modifier'
+  end
+] %>
+
+<%= render layout: 'layouts/menu' do %>
+  <%= render partial: 'menus/header', locals: { buttons:, back_url: modifiers_path } %>
+
+  <div class="block">
+    <div class="content">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <%# Options %>
+        <div class="lg:col-span-8">
+          <%= render partial: 'modifiers/options', locals: { modifier:, options: } %>
+        </div>
+        <%# End of Options %>
+        <%# Sidebar %>
+        <div class="lg:col-span-4">
+          <div class="grid grid-cols-1 gap-6">
+            <%# Modifier Details %>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex-grow">
+                  <p class="text-base text-gray-900 leading-normal font-medium">
+                    Details
+                  </p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-1 gap-2">
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Required:
+                      </p>
+                    </div>
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-900 leading-normal font-normal">
+                        <%= modifier.required? ? 'Yes' : 'No' %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Minimum selection:
+                      </p>
+                    </div>
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-900 leading-normal font-normal">
+                        <%= modifier.min_select %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Maximum selection:
+                      </p>
+                    </div>
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-900 leading-normal font-normal">
+                        <%= modifier.max_select %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Maximum option selection:
+                      </p>
+                    </div>
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-900 leading-normal font-normal">
+                        <%= modifier.max_option_select %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Last update:
+                      </p>
+                    </div>
+                    <div class="col-span-3">
+                      <p class="text-sm text-gray-900 leading-normal font-normal">
+                        <%= modifier.updated_at.localtime.to_fs(:short) %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%# End of Modifier Details %>
+
+            <%# Assigned Items %>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex-grow">
+                  <p class="text-base text-gray-900 leading-normal font-medium">
+                    Used by <%= pluralize(modifier.items_count, 'item') %>
+                  </p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-1 gap-4">
+                  <%= turbo_frame_tag :modifier_items, src: modifier_items_path(modifier), lazy: true do %>
+                    <%= render partial: 'components/loading' %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            <%# End of Assigned Items %>
+          </div>
+        </div>
+        <%# End of Sidebar %>
+      </div>
+    </div>
+  </div>
+<% end %>

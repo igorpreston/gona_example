@@ -1,0 +1,102 @@
+<div class="card overflow-hidden">
+  <div class="card-container">
+    <% if items&.size&.positive? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-100" cellpadding="0" cellspacing="0" border="0">
+          <thead>
+            <tr class="h-full text-gray-500 text-xs uppercase font-normal leading-normal">
+              <th scope="col" class="h-px w-px" style="min-width: 120px;">
+                <div class="py-2.5 pl-4 pr-3 sm:pl-3 text-left">
+                  <span class="font-normal leading-normal">
+                    Name
+                  </span>
+                </div>
+              </th>
+              <th scope="col" class="h-px w-px">
+                <div class="py-2.5 px-3 text-left">
+                  <span class="font-normal leading-normal">
+                    Price
+                  </span>
+                </div>
+              </th>
+              <th scope="col" class="h-px">
+                <div class="py-2.5 px-3 text-left">
+                  <span class="sr-only font-normal leading-normal">
+                    Status
+                  </span>
+                </div>
+              </th>
+              <th scope="col" class="h-px w-px">
+                <div class="py-2.5 pl-3 pr-4 sm:pr-3 text-right">
+                  <span class="font-normal leading-normal text-right">
+                    Updated
+                  </span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% @items.each do |item| %>
+              <tr class="bg-white hover:bg-gray-50 transition">
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to edit_item_path(item), id: item.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full py-4 pl-4 pr-3 sm:pl-3">
+                      <div class="flex items-center">
+                        <span class="h-16 w-16 block rounded overflow-hidden relative text-xl text-gray-500 bg-gray-100 mr-2">
+                          <%= render partial: 'items/photo', locals: { item: } %>
+                        </span>
+                        <span class="text-base text-gray-900 leading-normal font-medium">
+                          <%= item.name %>
+                        </span>
+                      </div>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to edit_item_path(item), id: item.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-900 leading-normal font-medium overflow-auto">
+                        <%= item.price.format %>
+                        <span class="text-gray-500 text-sm font-normal">
+                          / <%= item.unit %>
+                        </span>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to edit_item_path(item), id: item.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-900 leading-normal">
+                        <%= render partial: "items/statuses/#{item.status.downcase.underscore}", locals: { item: } %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to edit_item_path(item), id: item.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="flex items-center justify-end h-full py-4 pl-3 pr-4 sm:pr-3 text-right">
+                      <span class="text-base text-gray-500 leading-normal font-normal">
+                        <%= item.updated_at.localtime.to_fs(:short) %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <%= render partial: 'components/empty_state', locals: {
+        icon: 'inbox',
+        title: 'No items',
+        description: 'You have not created any items yet.',
+        buttons: [
+          link_to('Add first item', new_item_path, class: 'btn btn-primary', data: { turbo: false })
+        ]
+      } %>
+    <% end %>
+  </div>
+</div>
+

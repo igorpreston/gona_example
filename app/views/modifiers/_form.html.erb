@@ -1,0 +1,141 @@
+<%= form_with model: modifier,
+  data: {
+    turbo: false,
+    controller: 'nested-form',
+    nested_form_wrapper_selector_value: '#nestedFormWrapper',
+  } do |f|
+%>
+  <div class="grid grid-cols-1 gap-10">
+
+    <%# Name %>
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :name, 'Name', class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_field :name, class: 'input', value: f.object.name %>
+      </div>
+      <div class="mt-1">
+        <p class="tip">
+          The name of the modifier. This will be displayed to the customer.
+        </p>
+      </div>
+    </div>
+    <%# End of Name %>
+    <%# Options %>
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :options, 'Options', class: 'label' %>
+      </div>
+      <div class="grid grid-cols-1 gap-4">
+        <%# Option template - will be copied %>
+        <template data-nested-form-target="template">
+          <%= f.fields_for :options, Option.new, child_index: 'NEW_RECORD' do |option_fields| %>
+            <%= render 'modifiers/option_form', f: option_fields %>
+          <% end %>
+        </template>
+        <%# End of Option template %>
+        <%# Existing Options %>
+        <%= f.fields_for :options do |option_fields| %>
+          <div class="grid grid-cols-1 gap-4">
+            <%= render 'modifiers/option_form', f: option_fields %>
+          </div>
+        <% end %>
+        <%# End of Existing Options %>
+        <%# Insert Option Into %>
+        <div data-nested-form-target="target"></div>
+        <%# End of Insert Option Into %>
+      </div>
+      <%# Add Option Button %>
+      <div class="col">
+        <%= button_tag type: 'button', class: 'btn btn-secondary w-full', data: { action: 'nested-form#add' } do %>
+          <%= icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') %>
+          Add option
+        <% end %>
+      </div>
+      <%# End of Add Option Button %>
+    </div>
+    <%# End of Options %>
+    <%# Rules %>
+    <div class="col border-t pt-4">
+      <div class="mb-4">
+        <p class="text-sm text-gray-900 leading-normal font-medium">
+          Rules
+        </p>
+      </div>
+      <div class="grid grid-cols-1 gap-6">
+        <%# Min Select %>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-9">
+            <%= f.label :required, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+              Require customers to select an item?
+            <% end %>
+          </div>
+          <div class="col-span-3 text-right">
+            <%= f.check_box :required, type: 'checkbox', class: 'checkbox', value: f.object.min_select %>
+          </div>
+        </div>
+        <%# End of Min Select %>
+        <%# Min Select %>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-9">
+            <%= f.label :min_select, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+              What's the minimum number of options a customer must select?
+            <% end %>
+          </div>
+          <div class="col-span-3">
+            <%= f.number_field :min_select, min: 0, class: 'input', value: f.object.min_select %>
+          </div>
+        </div>
+        <%# End of Min Select %>
+        <%# Max Select %>
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-9">
+            <%= f.label :max_select, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+              What's the maximum number of options a customer can select?
+            <% end %>
+          </div>
+          <div class="col-span-3">
+            <%= f.text_field :max_select, class: 'input', value: f.object.max_select %>
+          </div>
+        </div>
+        <%# End of Max Select %>
+        <%# Max Option Select %>
+<!--        <div class="grid grid-cols-12 gap-4">-->
+<!--          <div class="col-span-9">-->
+            <%#= f.label :max_option_select, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+<!--              How many times can customers select any single option?-->
+            <%# end %>
+<!--          </div>-->
+<!--          <div class="col-span-3">-->
+            <%#= f.text_field :max_option_select, class: 'input', value: f.object.max_option_select %>
+<!--          </div>-->
+<!--        </div>-->
+        <%# End of Max Option Select %>
+      </div>
+    </div>
+    <%# End of Rules %>
+
+    <%# Submit %>
+    <div class="col flex justify-end -m-2">
+      <% unless f.object.new_record? %>
+        <span class="p-2">
+          <label for="delete" class="btn btn-danger">Delete</label>
+        </span>
+      <% end %>
+      <span class="p-2">
+        <%= submit_tag "Save",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+        %>
+      </span>
+    </div>
+    <%# End of Submit %>
+  </div>
+<% end %>
+<%= button_to '',
+  modifier_path(modifier),
+  method: :delete,
+  id: 'delete',
+  data: { turbo: false },
+  class: 'hidden' unless modifier.new_record?
+%>

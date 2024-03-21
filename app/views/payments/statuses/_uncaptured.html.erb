@@ -1,0 +1,14 @@
+<span
+  class="pill pill-gray"
+>
+  Uncaptured
+  <span class="ml-2 text-gray-900 leading-normal">
+    <%= icon(Rails.application.config.fa_style, 'clock') %>
+  </span>
+
+  <div class="hidden rounded relative overflow-hidden" role="tooltip" data-popper-target="tooltip">
+    <span class="max-w-xs whitespace-normal block text-white py-1 px-2 text-xs font-normal leading-normal bg-black/95">
+      This payment has not been captured yet. It will be captured once the order is ready.
+    </span>
+  </div>
+</span>

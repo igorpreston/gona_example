@@ -1,0 +1,12 @@
+<% content_for :title, 'New option' %>
+<% content_for :heading, 'New option' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render partial: 'form', locals: { option:, modifier: } %>
+  </div>
+<% end %>

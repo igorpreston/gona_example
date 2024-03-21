@@ -1,0 +1,14 @@
+<%= turbo_frame_tag :category_menus do %>
+  <div class="grid grid-cols-1 gap-4">
+    <% if category.menus_count.positive? %>
+      <%= render partial: 'menus/row', collection: @menus, as: :menu %>
+      <div class="mt-2">
+        <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+      </div>
+    <% else %>
+      <div class="text-sm text-gray-500 leading-normal text-center">
+        Nothing here yet
+      </div>
+    <% end %>
+  </div>
+<% end %>

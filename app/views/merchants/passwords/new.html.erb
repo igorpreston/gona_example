@@ -1,0 +1,15 @@
+<%= content_for :heading, t("devise.passwords.new.heading") %>
+<%= content_for :subheading do %>
+  <%= t('devise.sessions.new.subheading_html', link: link_to(t('devise.sessions.new.sign_up_link'), new_registration_path(resource_name), class: 'text-blue-600 hover:text-blue-700')) %>
+<% end %>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { class: 'grid grid-cols-1 gap-4' }) do |f| %>
+  <div>
+    <%= f.email_field :email, autofocus: true, autocomplete: 'email', required: true, class: 'input-auth', placeholder: t('devise.sessions.new.email_placeholder') %>
+  </div>
+
+  <div>
+    <%= f.submit t('devise.passwords.new.submit'), class: 'flex w-full justify-center rounded border border-transparent bg-blue-600 p-3 sm:p-4 text-md font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 cursor-pointer' %>
+  </div>
+  <div></div>
+<% end %>

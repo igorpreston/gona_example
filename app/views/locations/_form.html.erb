@@ -1,0 +1,293 @@
+<%= form_with model: location,
+  url: location.new_record? ? locations_path : location_path(location),
+  method: location.new_record? ? :post : :patch,
+  local: true do |f|
+%>
+  <div class="grid grid-cols-1 gap-20">
+    <%# Business information %>
+    <div class="block">
+      <div class="mb-4">
+        <p class="text-base font-medium text-gray-900 leading-normal">
+          Basic information
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="block">
+          <div class="mb-2">
+            <%= f.label :name, 'Nickname', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.text_field :name, value: f.object&.name, class: 'input' %>
+          </div>
+          <div class="mt-2">
+            <p class="tip">
+              This name will only be used internally to help you identify this location.
+            </p>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="mb-2">
+            <%= f.label :location_type, 'Location type', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.select :location_type, Location.location_types.keys.map { |type| [type.humanize, type] }, {}, class: 'input', selected: f.object&.location_type %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%# End of Business information %>
+
+    <%# Pickup instructions %>
+    <div class="block">
+      <div class="mb-4">
+        <p class="text-base font-medium text-gray-900 leading-normal">
+          Pickup instructions
+        </p>
+      </div>
+      <div class="grid grid-cols-1 gap-6">
+        <div class="block">
+          <div class="mb-2">
+            <%= f.label :pickup_instructions, 'Pickup instructions', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.text_area :pickup_instructions, class: 'input', autofocus: false, value: f.object&.pickup_instructions, data: { controller: 'textarea-autogrow', character_counter_target: 'input' } %>
+          </div>
+          <div class="mt-2">
+            <p class="tip">
+              Your customers will see these instructions when they place an order for pickup.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%# End of Pickup instructions %>
+
+
+    <%# Address %>
+    <div class="block">
+      <div class="mb-4">
+        <p class="text-base font-medium text-gray-900 leading-normal">
+          Address
+        </p>
+      </div>
+      <%= f.fields_for :address do |ff| %>
+        <div class="grid grid-cols-1 gap-4">
+          <div class="block">
+            <div class="block mb-2">
+              <%= ff.label :line_one, 'Address line one', class: 'label' %>
+            </div>
+            <div class="block">
+              <%= ff.text_field :line_one, value: ff.object&.line_one, class: 'input' %>
+            </div>
+          </div>
+          <div class="block">
+            <div class="block mb-2">
+              <%= ff.label :line_two, 'Address line two', class: 'label' %>
+            </div>
+            <div class="block">
+              <%= ff.text_field :line_two, value: current_tenant.address&.line_two, class: 'input', value: ff.object&.line_two %>
+            </div>
+          </div>
+          <div class="block">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="col">
+                <div class="block mb-2">
+                  <%= ff.label :city, 'City', class: 'label' %>
+                </div>
+                <div class="block">
+                  <%= ff.text_field :city, value: ff.object&.city, class: 'input' %>
+                </div>
+              </div>
+              <div class="col">
+                <div class="block mb-2">
+                  <%= ff.label :zip, 'Zip', class: 'label' %>
+                </div>
+                <div class="block">
+                  <%= ff.text_field :zip, value: ff.object&.zip, class: 'input' %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="block">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="block">
+                <div class="block mb-2">
+                  <%= ff.label :state, 'State', class: 'label' %>
+                </div>
+                <div class="block">
+                  <%= ff.text_field :state, value: ff.object&.state, class: 'input' %>
+                </div>
+              </div>
+              <div class="block">
+                <div class="block mb-2">
+                  <%= ff.label :country, 'Country', class: 'label' %>
+                </div>
+                <div class="block">
+                  <%= ff.country_select :country, {
+                    only: Rails.application.config.countries,
+                    selected: current_tenant.address&.country,
+                    include_blank: false }, { class: 'input' }
+                  %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <%# End of Address %>
+
+    <%# Contact information %>
+    <div class="block">
+      <div class="mb-4">
+        <p class="text-base font-medium text-gray-900 leading-normal">
+          Contact information
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="block">
+          <div class="mb-2">
+            <%= f.label :email, 'Email', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.text_field :email, value: f.object&.email, class: 'input' %>
+          </div>
+          <div class="mt-2">
+            <p class="tip">
+              Your customers will see this email addres on Location details page.
+            </p>
+          </div>
+        </div>
+        <div class="block">
+          <div class="mb-2">
+            <%= f.label :phone, 'Phone', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.text_field :phone, value: f.object&.phone, class: 'input' %>
+          </div>
+          <div class="mt-2">
+            <p class="tip">
+              Your customers will see this phone number on Location details page.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%# End of Contact information %>
+
+    <%# Business hours %>
+    <!--
+    <div class="block">
+      <div class="mb-4">
+        <p class="text-base font-medium text-gray-900 leading-normal">
+          Business hours
+        </p>
+      </div>
+      <div class="grid grid-cols-1 gap-4">
+        <div class="block">
+          <div class="mb-2">
+            <%= f.label :timezone, 'Timezone', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.select :timezone, options_for_select(ActiveSupport::TimeZone.all.map { |tz| [tz.name, tz.name] }, selected: location.timezone), {}, class: 'input', selected: f.object&.timezone %>
+          </div>
+          <div class="mt-2">
+            <p class="tip">
+              This timezone will be used to display your business hours to your customers.
+            </p>
+          </div>
+        </div>
+        <div class="block">
+          <% Period::DAYS.each do |day| %>
+            <div
+              data-controller="nested-form"
+              data-nested-form-target="container"
+              data-nested-form-association="schedule"
+              data-nested-form-wrapper-selector-value=".nested-form-wrapper"
+            >
+              <% schedule_for_day = f.object.schedule.select { |schedule| schedule.day_of_week == day.to_s } %>
+
+              <template data-nested-form-target="template">
+                <%= f.fields_for :schedule,
+                  Period.new,
+                  child_index: 'NEW_RECORD' do |schedule_fields| %>
+                  <%= schedule_fields.hidden_field :day_of_week, value: day %>
+                  <div class="nested-form-wrapper grid grid-cols-12 gap-6 items-center mt-6" data-new-record="true">
+                    <div class="col-span-5">
+                      <%= schedule_fields.text_field :start_local_time, class: 'input' %>
+                    </div>
+                    <div class="col-span-5">
+                      <%= schedule_fields.text_field :end_local_time, class: 'input' %>
+                    </div>
+                    <div class="col-span-2">
+                      <button type="button" data-action="nested-form#remove" class="text-gray-500 hover:text-red-500 transition text-base text-center w-full h-full">
+                        <%= icon(
+                          Rails.application.config.fa_style,
+                          'trash'
+                        ) %>
+                      </button>
+                      <%= schedule_fields.hidden_field :_destroy %>
+                    </div>
+                  </div>
+                <% end %>
+              </template>
+
+
+
+              <div class="grid grid-cols-12 gap-8">
+                <div class="col-span-4">
+                  <p class="text-gray-900 text-base font-normal leading-normal">
+                    <%= day %>
+                  </p>
+                </div>
+
+                <div class="w-full col-span-8">
+                  <% schedule_for_day.each do |schedule_entry| %>
+                    <%= f.fields_for :schedule, schedule_entry do |schedule_fields| %>
+                      <%= schedule_fields.hidden_field :day_of_week, value: day %>
+                      <div class="nested-form-wrapper grid grid-cols-12 gap-6 items-center" data-new-record="false">
+                        <div class="col-span-5">
+                          <%= schedule_fields.text_field :start_local_time, class: 'input' %>
+                        </div>
+                        <div class="col-span-5">
+                          <%= schedule_fields.text_field :end_local_time, class: 'input' %>
+                        </div>
+                        <div class="col-span-2">
+                          <button type="button" data-action="nested-form#remove" class="text-gray-500 hover:text-red-500 transition text-base text-center w-full h-full">
+                            <%= icon(
+                              Rails.application.config.fa_style,
+                              'trash'
+                            ) %>
+                          </button>
+                          <%= schedule_fields.hidden_field :_destroy %>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% end %>
+
+                  <div data-nested-form-target="target"></div>
+                  <div class="mt-2">
+                    <%= button_tag type: 'button', class: 'btn btn-secondary w-full', data: { action: 'nested-form#add', target: 'template' } do %>
+                      <%= icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') %>
+                      Add Schedule for <%= day %>
+                    <% end %>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <%# End of Business hours %>
+    -->
+
+    <div class="text-right">
+      <%= submit_tag "Save",
+        { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+      %>
+    </div>
+  </div>
+<% end %>

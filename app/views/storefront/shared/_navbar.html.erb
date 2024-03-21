@@ -1,0 +1,57 @@
+<header class="bg-white block relative z-10 shrink-0 grow-0">
+  <div class="content">
+    <div class="w-full flex flex-row relative justify-between h-[60px]">
+
+      <%# Left %>
+      <div class="h-full flex justify-start items-center shrink-0 grow-[1] basis-0">
+        <ul class="flex items-center -m-1">
+          <% if @order.present? && @order.dine_in? %>
+            <li class="h-full">
+              <%= link_to table_path(@order.table), class: 'h-full items-center block px-2 py-1 rounded-full bg-gray-100 text-gray-900 text-sm font-normal leading-normal transition hover:bg-gray-200' do %>
+                My table
+              <% end %>
+            </li>
+          <% elsif @order.present? %>
+            <li class="h-full">
+              <%= link_to location_path(@order.location), class: 'h-full items-center block px-2 py-1 rounded-full bg-gray-100 text-gray-900 text-sm font-normal leading-normal transition hover:bg-gray-200' do %>
+                Order more
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <%# End of Left %>
+
+      <%# Center %>
+      <div class="h-full flex justify-center items-center shrink-0 grow-[1] basis-0">
+        <span class="inline h-[44px] w-[44px] rounded-full relative overflow-hidden shadow ring-1 ring-gray-100">
+          <% if @order.present? %>
+            <% url = @order.table_id? ? location_path(@order.location, table_id: @order.table) : location_path(@order.location) %>
+            <%= link_to url, class: 'flex items-center h-full w-full' do %>
+              <%= render partial: 'organizations/logo', locals: { organization: @order.location&.organization } %>
+            <% end %>
+          <% else %>
+            <%= render partial: 'components/logo', locals: {
+              classes: "h-full w-full p-0.5 rounded-full bg-blue-500 fill-white hover:bg-blue-600 transition"
+            } %>
+          <% end %>
+        </span>
+      </div>
+      <%# End of Center %>
+
+      <%# Right %>
+      <div class="h-full flex justify-end items-center shrink-0 grow-[1] basis-0">
+        <ul class="flex items-center -m-1">
+          <% if @order.present? %>
+            <li class="h-full">
+              <%= link_to location_details_path(@order.location), data: { turbo_frame: :modal }, class: 'h-full items-center block px-2 py-1 rounded-full bg-gray-100 text-gray-900 text-sm font-normal leading-normal transition hover:bg-gray-200' do %>
+                About
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      <%# End of Right %>
+    </div>
+  </div>
+</header>

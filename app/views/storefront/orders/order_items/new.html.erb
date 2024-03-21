@@ -1,0 +1,17 @@
+<% content_for :title, menu_category_item.item.name %>
+<% content_for :heading, menu_category_item.item.name %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do %>
+  <div class="block">
+    <%= render partial: 'storefront/orders/order_items/form', locals: {
+        order: order,
+        menu_category_item: menu_category_item,
+        order_item: OrderItem.new
+      }
+    %>
+  </div>
+<% end %>

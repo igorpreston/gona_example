@@ -1,0 +1,77 @@
+<% content_for :title, 'Users and permissions' %>
+<% content_for :heading, 'Users and permissions' %>
+
+<%= render partial: 'organizations/header', locals: { back_url: edit_organization_path } %>
+
+<div class="block mt-8">
+  <div class="content-md">
+    <div class="grid grid-cols-1 gap-8">
+      <%# Owner %>
+      <div class="card">
+        <div class="card-header">
+          <div class="w-full">
+            <p class="text-base text-gray-900 leading-normal font-medium">
+              Owner
+            </p>
+            <p class="text-sm text-gray-500 leading-normal font-normal mt-0.5">
+              Store owners have some permissions that can't be assigned to staff.
+            </p>
+          </div>
+        </div>
+        <div class="card-container mt-4 md:mt-6">
+          <ul class="grid grid-cols-1 divide-y divide-gray-100">
+            <li class="col">
+              <%= link_to organization_merchants_path, class: 'block hover:bg-gray-50' do %>
+                <div class="flex items-center p-4 md:p-6">
+                  <span
+                    class="shrink-0 mr-6 flex items-center justify-center h-12 w-12 rounded-full text-lg overflow-hidden"
+                  >
+                    <%= render partial: 'merchants/avatar', locals: { merchant: owner } %>
+                  </span>
+                  <div class="w-full">
+                    <p class="text-sm text-gray-900 leading-normal font-medium"><%= owner.name %></p>
+                    <% if owner.last_sign_in_at %>
+                      <p class="text-xs text-gray-500 leading-normal font-normal">
+                        Last login was
+                        <%= owner.last_sign_in_at&.localtime&.to_fs(:long) %>
+                      </p>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <%# End of Owner %>
+
+      <%# Merchants %>
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <div class="w-full">
+              <p class="text-base text-gray-900 leading-normal font-medium">
+                Staff
+              </p>
+            </div>
+            <div class="shrink-0 ml-4 md:ml-6">
+              <%= link_to 'Add new member', new_organization_merchant_path, class: 'text-base text-blue-600 hover:text-blue-500 transition', data: {
+                turbo_frame: :modal
+              } %>
+            </div>
+          </div>
+
+          <div class="card-container mt-4 md:mt-6">
+            <%= turbo_frame_tag :merchants, class: 'grid grid-cols-1' do %>
+              <%= render partial: 'organizations/merchants/merchant', collection: @merchants %>
+            <% end %>
+          </div>
+        </div>
+        <%# End of Merchants %>
+
+        <div class="block mt-4">
+          <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+        </div>
+      </div>
+    </div>
+</div>

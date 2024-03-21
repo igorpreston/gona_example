@@ -1,0 +1,14 @@
+<span class="absolute top-0 bottom-0 right-0 left-0 h-full w-full inline-flex items-center justify-center">
+  <% if item.photo.attached? %>
+    <%= cl_image_tag(
+      item.photo.key,
+      class: 'w-full h-full object-cover',
+      crop: :fill,
+      gravity: 'auto',
+      quality: 'auto',
+      fetch_format: 'auto'
+    ) %>
+  <% else %>
+    <%= icon(Rails.application.config.fa_style, item.modifier? ? 'ballot-check' : 'tag') %>
+  <% end %>
+</span>

@@ -1,0 +1,20 @@
+en:
+  organization:
+    health:
+      disabled_reason:
+        legal_name_missing:
+          title: Legal Name Missing
+          description: Please provide your organization's legal name to continue on GONA.
+          cta: Add Legal Name
+        nickname_missing:
+          title: Nickname Missing
+          description: Give your organization a nickname to build your brand on GONA.
+          cta: Add Nickname
+        address_missing:
+          title: Address Missing
+          description: Your organization's address is required for billing purposes.
+          cta: Add Address
+        payment_method_missing:
+          title: Banking Information Missing
+          description: Add your banking information to receive payouts from GONA Payments.
+          cta: Add Banking Information

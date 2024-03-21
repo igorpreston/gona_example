@@ -1,0 +1,300 @@
+<% buttons = case order.status
+  when 'draft'
+    [
+      {
+        label: 'Submit',
+        url: order_status_path(order),
+        params: { order: { status: :submitted } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  when 'submitted'
+    [
+      {
+        label: 'Cancel',
+        url: order_status_path(order),
+        params: { order: { status: :cancelled } },
+        icon: 'xmark',
+        type: 'secondary',
+        method: :patch
+      },
+      {
+        label: 'Accept',
+        url: order_status_path(order),
+        params: { order: { status: :in_progress } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  when 'in_progress'
+    [
+      {
+        label: 'Cancel',
+        url: order_status_path(order),
+        params: { order: { status: :cancelled } },
+        icon: 'xmark',
+        type: 'secondary',
+        method: :patch
+      },
+      {
+        label: 'Ready',
+        url: order_status_path(order),
+        params: { order: { status: :ready } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  when 'ready'
+    [
+      {
+        label: 'Complete',
+        url: order_status_path(order),
+        params: { order: { status: :completed } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  when 'ongoing'
+    [
+      {
+        label: 'Cancel',
+        url: order_status_path(order),
+        params: { order: { status: :cancelled } },
+        icon: 'xmark',
+        type: 'secondary',
+        method: :patch
+      },
+      {
+        label: 'Complete',
+        url: order_status_path(order),
+        params: { order: { status: :completed } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  else
+    []
+  end
+%>
+
+<% content_for :title, "##{order.number}" %>
+
+<%= render layout: 'layouts/modal' do |f| %>
+  <%# State %>
+  <div class="block">
+    <div class="block">
+      <h1 class="text-lg text-gray-900 font-semibold leading-normal">
+        <%= order.status.humanize %>
+      </h1>
+    </div>
+
+    <div class="mt-6">
+      <div class="relative" aria-hidden="true">
+        <div class="overflow-hidden rounded-full bg-gray-100">
+          <div class="h-1.5 rounded-full <%= order.cancelled? ? 'bg-gray-600' : 'bg-green-600' %>" style="width: <%= order.progress_percentage %>%"></div>
+        </div>
+        <div class="mt-2 flex justify-between text-xs font-medium leading-normal">
+          <% if order.cancelled? %>
+            <div class="text-gray-500 flex justify-end w-full">Cancelled</div>
+          <% else %>
+            <div class="<%= order.submitted_at ? 'text-green-600' : 'text-gray-500' %>">Submitted</div>
+            <div class="<%= order.in_progress_at ? 'text-green-600' : 'text-gray-500' %>">In progress</div>
+            <div class="<%= order.ready_at ? 'text-green-600' : 'text-gray-500' %>">Ready</div>
+            <div class="<%= order.completed_at ? 'text-green-600' : 'text-gray-500' %>">Completed</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%# End of State %>
+
+  <%# Details %>
+  <div class="mt-12 block">
+    <div class="mb-4">
+      <p class="text-base text-gray-900 leading-normal font-medium">
+        Details
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3">
+      <div class="grid grid-cols-12 gap-3">
+        <span class="col-span-4">
+          <p class="text-sm text-gray-500">
+            Type:
+          </p>
+        </span>
+        <span class="col-span-8 text-right">
+          <p class="text-sm text-gray-900 leading-normal font-normal">
+            <%= order.preference.humanize %>
+          </p>
+        </span>
+      </div>
+      <% if order.table_id? %>
+        <div class="grid grid-cols-12 gap-3">
+          <span class="col-span-4">
+            <p class="text-sm text-gray-500">
+              Table:
+            </p>
+          </span>
+          <span class="col-span-8 text-right">
+            <p class="text-sm text-gray-900 leading-normal font-normal">
+              <%= order.table&.name %>
+            </p>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Details %>
+
+  <%# Items %>
+  <div class="block mt-12">
+    <div class="mb-4">
+      <p class="text-base text-gray-900 leading-normal font-medium">
+        <%= pluralize(order.items_count, 'item') %>
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4">
+      <% order.order_items.includes(:item).each do |oi| %>
+        <div class="col flex">
+          <div class="shrink-0 mr-3">
+            <span class="min-w-[32px] h-[32px] flex items-center p-0.5 text-center justify-center rounded bg-gray-200 text-gray-900 leading-normal font-normal">
+              <%= oi.quantity %>
+            </span>
+          </div>
+          <div class="grow shrink w-full">
+            <div class="w-full flex">
+              <div class="grow shrink w-full">
+                <div class="block">
+                  <p class="text-base text-gray-900 leading-normal font-normal mt-1">
+                    <%= oi.item&.name %>
+                  </p>
+                </div>
+              </div>
+              <div class="shrink-0 ml-3">
+                <p class="text-gray-500 leading-normal font-normal text-base mt-1">
+                  <%= oi.price.format %>
+                </p>
+              </div>
+            </div>
+            <% if oi.modifiers_count.positive? %>
+              <div class="mt-2 grid grid-cols-1 gap-2">
+                <% oi.applied_options.each do |ao| %>
+                  <div class="flex w-full col">
+                    <span class="shrink-0 mr-1 inline text-sm text-gray-500 leading-normal">
+                      <%= icon(
+                        Rails.application.config.fa_style,
+                        'arrow-turn-down-right'
+                      ) %>
+                    </span>
+                    <div class="grow shrink w-full">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        <%= ao.item&.name %>
+                      </p>
+                    </div>
+                    <% if ao.item&.price_cents.positive? %>
+                      <div class="shrink-0 ml-3 text-right">
+                        <p class="text-gray-500 leading-normal font-normal text-sm">
+                          <%= ao.item&.price&.format %>
+                        </p>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+            <% if oi.note.present? %>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500 leading-normal font-normal italic">
+                  <%= oi.note&.body %>
+                </p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Items %>
+
+  <%# Payment %>
+  <div class="block mt-12">
+    <div class="mb-4">
+      <p class="text-base text-gray-900 leading-normal font-medium">
+        Payment
+      </p>
+    </div>
+    <div class="grid grid-cols-1 gap-4">
+      <% order.payments.each do |payment| %>
+        <div class="col">
+          <%= link_to payment, class: 'block relative' do %>
+            <div class="flex items-center">
+              <span class="flex shrink-0 bg-gray-200 rounded justify-center items-center text-lg text-gray-500 leading-normal h-8 w-8 mr-3">
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'credit-card'
+                ) %>
+              </span>
+              <div class="grow shrink w-full">
+                <p class="text-gray-900 leading-normal font-medium text-sm mb-1">
+                  <%= payment.amount&.format %>
+                </p>
+              </div>
+              <div class="shrink-0 ml-3">
+                <%= render partial: "payments/statuses/#{payment.status.underscore}", locals: { payment: } %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Payment %>
+
+  <%# Activity %>
+  <div class="block mt-12">
+    <div class="mb-4">
+      <p class="text-base text-gray-900 leading-normal font-medium">
+        Activity
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4">
+      <% order.logs.order(created_at: :desc).each do |log| %>
+        <div class="col flex items-start">
+          <div class="mr-3 shrink-0">
+            <span class="block h-2 w-2 mt-1.5 bg-blue-500 rounded-full ring-2 ring-blue-100"></span>
+          </div>
+          <div class="grow shrink w-full">
+            <p class="text-sm text-gray-900 leading-normal font-normal">
+              <%= t("logs.#{log.message_key}") %>
+            </p>
+            <p class="text-xs text-gray-500 leading-normal font-normal">
+              <%= log.created_at.strftime('%b. %d, %Y %I:%M %p') %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Activity %>
+
+  <%# Actions %>
+  <div class="sticky z-20 py-2 bottom-0 mt-12">
+    <div class="flex items-center flex-wrap -m-2">
+      <% buttons.map do |button| %>
+        <span class="shrink-0 p-2 grow">
+          <%= button_to button[:label], button[:url], method: button[:method], params: button[:params], class: "btn btn-#{button[:type]} w-full" %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Actions %>
+<% end %>

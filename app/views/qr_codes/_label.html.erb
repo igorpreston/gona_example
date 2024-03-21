@@ -1,0 +1,12 @@
+<span class="h-full w-full inline-flex rounded items-center justify-center">
+  <% if qr_code.label.attached? %>
+    <%= cl_image_tag(
+      qr_code.label.key,
+      class: 'w-full h-full object-cover'
+    ) %>
+  <% else %>
+    <%= icon(
+      "#{Rails.application.config.fa_style} fa-solid fa-spin", 'spinner-third', class: 'text-gray-500'
+    ) %>
+  <% end %>
+</span>

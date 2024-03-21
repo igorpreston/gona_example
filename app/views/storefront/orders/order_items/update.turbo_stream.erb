@@ -1,0 +1,11 @@
+<%= turbo_stream.replace(
+  order_item.prefix_id,
+  partial: 'storefront/orders/checkouts/order_items/order_item',
+  locals: { order_item: }
+) %>
+<%= turbo_stream.update(
+  :order_payment,
+  partial: 'storefront/orders/checkouts/payment',
+  locals: { order: }
+) %>
+<%= turbo_stream.update(:modal, '') %>

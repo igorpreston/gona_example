@@ -1,0 +1,26 @@
+<%= turbo_frame_tag category.prefix_id do %>
+  <div class="col -m-2">
+    <%= button_to menu_categories_path(
+      menu_id: menu.prefix_id,
+      category_id: category.prefix_id),
+      method: :post,
+      class: 'block p-2 transition hover:bg-gray-50 rounded w-full' do
+    %>
+      <div class="flex items-center w-full">
+        <div class="mr-2 relative shrink-0 h-14 w-14 flex items-center justify-center p-2 rounded bg-gray-100 text-gray-500 text-xl">
+          <%= icon(Rails.application.config.fa_style, 'list') %>
+        </div>
+        <div class="flex-grow text-left">
+          <p class="text-base text-gray-900 leading-normal font-medium">
+            <%= category.name %>
+          </p>
+        </div>
+        <div class="shrink-0 ml-2">
+          <p class="text-sm text-gray-500 leading-normal mt-1">
+            <%= pluralize(category.items_count, 'item') %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

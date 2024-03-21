@@ -1,0 +1,39 @@
+<div class="block">
+  <div class="card overflow-hidden">
+    <div class="card-body bg-blue-600">
+      <div class="text-center mb-3">
+        <p class="text-white text-base font-normal leading-normal">
+          <%= t("trackings.tracking_header.#{order.status.underscore}") %>
+        </p>
+      </div>
+      <div class="text-center">
+        <h1 class="text-2xl font-semibold text-white leading-normal">
+          <%= readable_order_number(order.number) %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt-4">
+  <div class="grid grid-cols-1 gap-4">
+    <% order.logs.where(scope: :external).order(created_at: :desc).each do |log| %>
+      <div class="col">
+        <div class="flex items-center">
+          <div class="shrink-0 mr-4 w-4 flex items-center justify-center">
+            <span class="h-2 w-2 flex rounded-full ring-2 ring-blue-100 bg-blue-600"></span>
+          </div>
+          <div class="shrink grow w-full">
+            <p class="text-sm text-gray-900 leading-normal font-normal">
+              <%= t("logs.#{log.message_key}") %>
+            </p>
+          </div>
+          <div class="shrink-0 ml-3">
+            <p class="text-xs text-gray-500 leading-normal font-normal">
+              <%= time_ago_in_words(log.created_at) %> ago
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

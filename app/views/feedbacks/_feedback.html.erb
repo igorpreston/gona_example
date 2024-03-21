@@ -1,0 +1,8 @@
+<div class="relative block">
+  <%= link_to feedback, class: 'block hover:bg-gray-100 transition' do %>
+    <div class="flex">
+      <%= feedback.content %>
+      <%= feedback.user&.name %>
+    </div>
+  <% end %>
+</div>

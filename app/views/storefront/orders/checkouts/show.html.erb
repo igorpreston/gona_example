@@ -1,0 +1,76 @@
+<% content_for :head do %>
+  <%= javascript_include_tag "https://js.stripe.com/v3/", data: { turbolinks_track: 'reload' } %>
+<% end %>
+
+<% if organization.active? %>
+  <%# Order items %>
+  <div class="mt-8 lg:mt-12">
+    <div class="content-sm">
+      <div class="mb-4">
+        <h2 class="text-sm font-medium text-gray-900 leading-normal">
+          Your order
+        </h2>
+      </div>
+      <%= turbo_frame_tag :order_items, src: order_checkout_order_items_path(order), lazy: true do %>
+        <%= render partial: 'components/loading' %>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Order items %>
+
+  <%# Price breakdown %>
+  <div class="mt-12">
+    <div class="content-sm">
+      <%= turbo_frame_tag :order_payment do %>
+        <%= render partial: 'storefront/orders/checkouts/payment', locals: {
+          order:
+        } %>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Price breakdown %>
+
+  <%# Checkout button %>
+  <div class="mt-8 lg:mt-12">
+    <div class="content-sm">
+      <div class="block">
+        <%= link_to order_checkout_processor_path(order), data: { turbo_frame: :modal }, class: 'btn btn-dark btn-lg w-full rounded-full' do %>
+          <%= icon(
+            Rails.application.config.fa_style,
+            'credit-card',
+            class: 'mr-2',
+          ) %>
+          Pay the bill
+        <% end %>
+      </div>
+      <div class="mt-6 max-w-xs mx-auto">
+        <div class="flex flex-wrap justify-between -m-4">
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-visa') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-mastercard') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-amex') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-apple-pay') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'google-pay') %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%# End of Checkout button %>
+<% else %>
+  <div class="mt-8">
+    <div class="content-sm">
+      <p class="text-base text-center text-gray-900 leading-normal font-normal">
+        This organization is currently not accepting orders.
+      </p>
+    </div>
+  </div>
+<% end %>

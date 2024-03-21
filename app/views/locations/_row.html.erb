@@ -1,0 +1,13 @@
+<%= turbo_frame_tag location.prefix_id, class: 'col' do %>
+  <div class="flex items-center justify-between">
+    <div class="relative h-10 w-10 shrink-0 mr-2 rounded overflow-hidden bg-gray-100 text-sm text-gray-500 leading-normal font-normal flex items-center justify-center p-2">
+      <%= icon(Rails.application.config.fa_style, 'location-dot') %>
+    </div>
+    <div class="flex-grow flex items-center w-full">
+      <p class="text-sm text-gray-900 leading-normal font-normal">
+        <%= location.name %>
+      </p>
+      <span class="ml-2 h-2 w-2 inline-block rounded-full <%= location.open? ? 'bg-green-500' : 'bg-gray-300' %>"></span>
+    </div>
+  </div>
+<% end %>

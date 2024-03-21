@@ -1,0 +1,21 @@
+<% content_for :title, 'Edit order' %>
+<% content_for :heading, 'Edit order' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do %>
+  <div class="block">
+    <%= render partial: 'storefront/orders/order_items/form', locals: {
+        order: order, order_item: order_item
+      }
+    %>
+  </div>
+  <div class="mt-6">
+    <%= button_to order_checkout_order_item_path(order_item.order, order_item), method: :delete, class: 'text-red-600 block text-center px-4 py-2 text-sm w-full text-left rounded hover:bg-red-100 transition' do %>
+      <%= icon(Rails.application.config.fa_style, 'trash', class: 'mr-1') %>
+      Remove
+    <% end %>
+  </div>
+<% end %>

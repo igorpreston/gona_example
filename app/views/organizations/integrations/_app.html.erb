@@ -1,0 +1,48 @@
+<%= turbo_frame_tag "integration_#{app.template}" do %>
+  <div class="card">
+    <div class="card-body">
+      <div class="flex items-start">
+        <div class="shrink-0 mr-4">
+          <span class="h-12 w-12 block relative rounded overflow-hidden border p-1.5">
+            <%= render partial: "organizations/integrations/logos/#{app.template&.underscore}" %>
+          </span>
+        </div>
+
+        <div class="grow shrink w-full">
+          <div class="block">
+            <p class="text-base text-gray-900 leading-normal font-medium">
+              <%= app.name %>
+            </p>
+            <% if app.description? %>
+              <p class="text-sm text-gray-900 leading-normal font-normal mt-2">
+                <%= app.description %>
+              </p>
+            <% end %>
+          </div>
+
+          <div class="mt-4">
+            <div class="flex items-center flex-wrap -m-2">
+              <% unless current_tenant.integrated_with?(app) %>
+                <span class="grow-0 p-2">
+                  <%= link_to 'Connect', App::TEMPLATES[app.template].connect_url, class: 'btn btn-primary' %>
+                </span>
+              <% else %>
+                <% integration = current_tenant.integrations.find_by_app_id(app.id) %>
+                <span class="grow-0 p-2">
+                  <%= button_to organization_integration_path(integration), method: :delete, class: 'rounded bg-gray-50 hover:bg-gray-100 text-base text-gray-500 hover:text-gray-900 leading-normal py-1 px-2 transition', data: { turbo: false } do %>
+                    Disconnect
+                  <% end %>
+                </span>
+                <span class="grow-0 p-2">
+                  <p class="text-xs text-gray-500 leading-normal font-normal">
+                    Last synced <%= time_ago_in_words(integration.updated_at) %> ago
+                  </p>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

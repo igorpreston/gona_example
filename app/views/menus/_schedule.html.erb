@@ -1,0 +1,39 @@
+<% if menu.schedule.blank? %>
+  <div class="col">
+    <p class="text-sm text-gray-500 text-center leading-normal font-normal">
+      No schedule
+    </p>
+  </div>
+<% else %>
+  <% Period::DAYS.each do |day| %>
+    <div class="col">
+      <% daily_schedule = menu.schedule&.select { |item| item[:day_of_week] == day.to_s } %>
+
+      <div class="grid grid-cols-6 gap-4">
+        <div class="col-span-2">
+          <p class="text-sm text-gray-500 leading-normal font-normal">
+            <%= day.capitalize %>:
+          </p>
+        </div>
+
+        <div class="col-span-4 grid grid-cols-1 gap-2 text-right">
+          <% if daily_schedule.empty? %>
+            <div class="col">
+              <p class="text-sm text-gray-500 leading-normal font-normal">
+                Closed
+              </p>
+            </div>
+          <% else %>
+            <% daily_schedule.each do |schedule| %>
+              <div class="col">
+                <p class="text-sm text-gray-900 leading-normal font-normal">
+                  <%= DateTime.parse(schedule[:start_local_time]).strftime("%I:%M%P") %> - <%= DateTime.parse(schedule[:end_local_time]).strftime("%I:%M%P") %>
+                </p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

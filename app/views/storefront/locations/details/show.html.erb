@@ -1,0 +1,120 @@
+<% content_for :title, location.organization.name %>
+<% content_for :heading, location.organization.name %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <%# Map %>
+  <div class="block">
+    <div class="rounded bg-gray-50 h-[240px] w-full block overflow-hidden">
+      <%= js_map [
+        {
+          latitude: location.address&.latitude,
+          longitude: location.address&.longitude,
+          label: location.organization.name
+        },
+        ], markers: {
+          color: "#000000"
+        },
+        zoom: 16,
+        width: "100%",
+        height: "100%"
+      %>
+    </div>
+
+    <div class="mt-3 text-center">
+      <%= link_to location.address&.google_maps_url, class: 'text-sm text-gray-500 hover:text-gray-900 leading-normal font-normal underline block' do %>
+        <%= location.address&.to_s %>
+      <% end %>
+    </div>
+  </div>
+  <%# End of Map %>
+  <%# Pickup instructions %>
+  <% if location.pickup_instructions.present? %>
+    <div class="mt-10 block">
+      <div class="mb-4">
+        <p class="text-gray-900 leading-normal font-medium text-base">
+          Pickup instructions
+        </p>
+      </div>
+      <div class="block">
+        <p class="text-base text-gray-900 leading-normal font-normal">
+          <%= location.pickup_instructions %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+  <%# End of Pickup instructions %>
+  <%# Contact information %>
+  <% if location.phone.present? || location.email.present? %>
+    <div class="block mt-10">
+      <div class="mb-4">
+        <p class="text-gray-900 leading-normal font-medium text-base">
+          Contacts
+        </p>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <%# Phone number %>
+        <% if location.phone.present? %>
+          <div class="block">
+            <%= link_to "tel:#{location.phone}", class: 'bg-gray-100 hover:bg-gray-200 transition p-4 rounded flex items-start justify-between' do %>
+              <span class="shrink-0 mr-4">
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'phone',
+                  class: 'text-gray-500'
+                ) %>
+              </span>
+              <div class="grow w-full shrink whitespace-nowrap inline relative overflow-hidden">
+                <p class="text-sm text-gray-500 leading-normal font-normal">
+                  Call location
+                </p>
+                <p class="text-base text-gray-900 leading-normal font-normal overflow-hidden text-ellipsis">
+                  <%= location.phone %>
+                </p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <%# End of Phone %>
+        <%# Email %>
+        <% if location.email.present? %>
+          <div class="block">
+            <%= mail_to location.email, class: 'bg-gray-100 hover:bg-gray-200 transition p-4 rounded flex items-start justify-between' do %>
+              <span class="shrink-0 mr-4">
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'at',
+                  class: 'text-gray-500'
+                ) %>
+              </span>
+              <div class="grow w-full shrink whitespace-nowrap inline relative overflow-hidden">
+                <p class="text-sm text-gray-500 leading-normal font-normal">
+                  Send email
+                </p>
+                <p class="text-base text-gray-900 leading-normal font-normal overflow-hidden text-ellipsis">
+                  <%= location.email %>
+                </p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <%# End of Email %>
+    </div>
+  <% end %>
+  <%# End of Contact information %>
+  <%# Hours %>
+  <div class="mt-10 block">
+    <div class="mb-4">
+      <p class="text-gray-900 leading-normal font-medium text-base">
+        Hours
+      </p>
+    </div>
+    <div class="grid grid-cols-1 gap-4">
+      <%= render partial: 'storefront/locations/details/schedule', locals: { location: } %>
+    </div>
+  </div>
+  <%# End of Hours %>
+<% end %>

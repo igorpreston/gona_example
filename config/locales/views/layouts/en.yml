@@ -1,0 +1,4 @@
+en:
+  layout:
+    title: "%{name} – %{subname} – GONA"
+    title_default: "Dashboard – %{name} – GONA"

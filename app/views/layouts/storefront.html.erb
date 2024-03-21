@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang=<%= I18n.locale.to_s %> class="h-full">
+<head>
+  <%= render partial: 'storefront/shared/head' %>
+  <%= hotwire_livereload_tags if Rails.env.development? %>
+</head>
+<body class="justify-between flex flex-col bg-white min-h-screen">
+  <%# Navigation bar %>
+  <%= render partial: 'storefront/shared/navbar', locals: { location: @location } %>
+
+  <main class="block md:mt-4 shrink grow">
+    <%= yield %>
+  </main>
+  <%# Footer %>
+  <%= render partial: 'storefront/shared/footer' %>
+  <%# Modal window %>
+  <%= turbo_frame_tag :modal, lazy: true %>
+  <%# Notifications %>
+  <div class="z-20 flex self-center m-4 pointer-events-none fixed bottom-0 max-w-sm w-full">
+    <%= turbo_frame_tag :flash, class: 'grid grid-cols-1 gap-4 w-full' do %>
+      <%= render partial: 'components/flash', locals: { flash: flash } if flash.any? %>
+    <% end %>
+  </div>
+</body>
+</html>

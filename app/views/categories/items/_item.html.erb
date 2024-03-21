@@ -1,0 +1,19 @@
+<%= turbo_frame_tag item.prefix_id do %>
+  <div class="col -m-2">
+    <%= button_to category_category_items_path(category_id: category, item_id: item), method: :post, class: 'block p-2 transition hover:bg-gray-50 rounded w-full' do %>
+      <div class="flex items-center w-full">
+        <div class="mr-2 relative shrink-0 h-14 w-14 block rounded bg-gray-100">
+          <%= render partial: 'items/photo', locals: { item: } %>
+        </div>
+        <div class="flex-grow text-left">
+          <p class="text-base text-gray-900 leading-normal font-medium">
+            <%= item.name %>
+          </p>
+        </div>
+        <div class="shrink-0 ml-2">
+          <%= render partial: "items/statuses/#{item.status.underscore}", locals: { item: } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

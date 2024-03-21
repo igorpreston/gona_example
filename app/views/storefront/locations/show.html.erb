@@ -1,0 +1,52 @@
+<% content_for :title, location.organization.name %>
+<% current_menus = location.current_menus.select(&:active?) %>
+
+<%= render partial: 'storefront/locations/heading', locals: { location:, organization:, heading: true } %>
+
+<% if current_menus.size > 1 %>
+  <div class="mt-10">
+    <div class="content">
+      <div class="flex items-center overflow-x-auto -mx-3">
+        <% current_menus.each do |menu| %>
+          <div class="relative">
+            <%= link_to location_menu_path(location, menu), data: { turbo_frame: :location_menu }, class: 'block' do
+            %>
+              <div class="rounded overflow-hidden relative hover:bg-gray-100 transition px-3">
+                <p class="text-xl text-gray-900 leading-normal font-semibold whitespace-normal">
+                  <%= menu.name %>
+                </p>
+                <p class="text-sm text-gray-500 leading-normal font-normal mt-1 whitespace-nowrap">
+                  <% menu.today&.each do |period| %>
+                    <%= DateTime.parse(period[:start_local_time]).strftime("%I:%M %P") %> - <%= DateTime.parse(period[:end_local_time]).strftime("%I:%M %P") %>;
+                  <% end %>
+                </p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="mt-10">
+  <% if current_menus.size.positive? %>
+    <%= turbo_frame_tag :location_menu, src: location_menu_path(
+      location,
+      current_menus.first,
+      table_id: params[:table_id]
+    ), lazy: true do %>
+      <%= render partial: 'components/loading' %>
+    <% end %>
+  <% else %>
+    <div class="content">
+      <div class="flex items-center justify-center h-[200px]">
+        <p class="text-gray-500 text-center">
+          No menus available
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= render partial: "storefront/locations/orders/#{order.preference.underscore}", locals: { order:, location: } %>

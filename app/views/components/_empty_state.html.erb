@@ -1,0 +1,41 @@
+<div class="block p-4 md:p-6">
+  <div class="flex flex-col items-center">
+    <% if local_assigns.has_key?(:icon) %>
+      <div class="mb-6 block">
+        <span
+          class="w-14 h-14 flex items-center justify-center rounded bg-gray-100 text-2xl text-gray-500 leading-normal p-2"
+        >
+          <%= icon(Rails.application.config.fa_style, icon) %>
+        </span>
+      </div>
+    <% end %>
+
+    <% if local_assigns.has_key?(:titel) %>
+      <div class="mb-2">
+        <p class="text-2xl font-semibold text-gray-900 leading-normal text-center">
+          <%= title %>
+        </p>
+      </div>
+    <% end %>
+
+    <% if local_assigns.has_key?(:description) %>
+      <div class="block">
+        <p class="text-base text-gray-500 leading-normal font-normal text-center">
+          <%= description %>
+        </p>
+      </div>
+    <% end %>
+
+    <% if local_assigns.has_key?(:buttons) %>
+      <div class="mt-8">
+        <div class="flex items-center justify-center flex-wrap -m-2">
+          <% buttons.map do |button| %>
+            <div class="m-2 shrink-0">
+              <%= button %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

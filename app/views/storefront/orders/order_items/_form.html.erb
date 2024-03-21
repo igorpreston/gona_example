@@ -1,0 +1,148 @@
+<%= form_with model: order_item, url: order_item.new_record? ? order_order_items_path(order.prefix_id) : order_order_item_path(order.prefix_id, order_item.prefix_id) do |f| %>
+  <%= f.hidden_field :order_id, value: order.id %>
+  <%= f.hidden_field :item_id, value: menu_category_item.item_id if f.object.new_record? %>
+  <% main_record = f.object.new_record? ? menu_category_item : order_item %>
+
+  <div class="block">
+    <% if main_record.item.photo.attached? %>
+      <span class="h-56 w-56 relative block bg-gray-100 rounded overflow-hidden mx-auto text-5xl text-gray-500 mb-3">
+        <%= render partial: 'items/photo', locals: { item: main_record.item } %>
+      </span>
+    <% end %>
+
+    <% if main_record.item.description.present? %>
+      <div class="block">
+        <p class="text-sm text-gray-900 leading-normal font-normal">
+          <%= main_record.item&.description %>
+        </p>
+      </div>
+    <% end %>
+
+    <div class="mt-4">
+      <%= render partial: 'items/metadata_details', locals: { item: main_record.item } %>
+    </div>
+
+    <div class="mt-8">
+      <p class="text-lg text-gray-900 leading-normal font-medium">
+        <%= main_record.item&.price&.format %>
+        <span class="text-sm text-gray-500 leading-normal font-normal">
+          / <%= main_record.item&.unit %>
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <% if main_record.item.modifiers_count.positive? %>
+    <div class="block mt-10">
+      <div class="grid grid-cols-1 gap-14">
+        <% main_record.item&.modifiers.each do |modifier| %>
+          <div class="col">
+            <% order_item_modifier = order_item.order_item_modifiers.find_by(modifier_id: modifier.id) || order_item.order_item_modifiers.build %>
+
+            <%# Modifier name %>
+            <div class="flex items-start justify-between mb-4 pb-2 border-b border-gray-300">
+              <div class="grow shrink">
+                <p class="text-base text-medium text-gray-900 leading-normal font-medium">
+                  <%= modifier.name %>
+                </p>
+                <p class="text-xs text-gray-500 leading-normal mt-1">
+                  <%= modifier.max_select > 1 ? "Choose up to" : "Choose" %> <%= modifier.max_select %>
+                </p>
+              </div>
+              <% if modifier.required? %>
+                <div class="ml-4 shrink-0">
+                  <span class="text-xs text-gray-500 leading-normal font-medium uppercase">Required</span>
+                </div>
+              <% end %>
+            </div>
+            <%# End of Modifier name %>
+
+            <%# Options %>
+            <div class="block">
+              <%= f.fields_for :order_item_modifiers, order_item_modifier do |modifier_fields| %>
+                <%= modifier_fields.hidden_field :modifier_id, value: modifier.id %>
+
+                <div
+                  data-controller="option-selection"
+                  data-option-selection-max-selections="<%= modifier.max_select %>"
+                  class="grid grid-cols-1 gap-2"
+                >
+                  <%= modifier_fields.collection_check_boxes :option_ids,
+                    modifier.options.order(position: :asc), :id, :item_name_with_price, {} do |single_select|
+                  %>
+                    <div class="block" data-option-selection-target="optionRow">
+                      <%= single_select.label class: 'text-sm text-gray-900 leading-normal font-normal w-full block cursor-pointer' do %>
+                        <div class="py-2 flex items-center justify-between">
+                          <div class="w-full shrink grow">
+                            <p class="text-base text-gray-900 leading-normal font-normal">
+                              <%= single_select.object.item.name %>
+                            </p>
+                          </div>
+                          <div class="ml-4 shrink-0 flex items-center">
+                            <span class="mr-4 shrink-0">
+                              <% if single_select.object.item.price.positive? %>
+                                <p class="text-sm text-gray-500 leading-normal font-normal mt-0.5">
+                                  +<%= single_select.object.item.price.format %>
+                                </p>
+                              <% end %>
+                            </span>
+
+                            <span class="shrink-0">
+                              <%= single_select.check_box class: 'checkbox',
+                                data: { option_selection_target: 'option' }
+                              %>
+                            </span>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+
+              <% end %>
+            </div>
+            <%# End of Options %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mt-10">
+    <%= f.fields_for :note, f.object.note || f.object.build_note do |ff| %>
+      <div class="block mb-2">
+        <%= ff.label :body, 'Special instructions', class: 'label' %>
+      </div>
+      <div class="block">
+        <%= ff.text_area :body, class: 'input', autofocus: false, data: { controller: 'textarea-autogrow', character_counter_target: 'input' } %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Quantity and Submit %>
+  <div class="mt-10 flex items-centet sticky bottom-0 bg-white z-10 py-4">
+    <div class="flex justify-between items-center shrink-0">
+      <div class="flex bg-gray-100 rounded-full p-2" data-controller="quantity">
+
+        <%= button_tag type: 'button', class: 'p-1 bg-white text-gray-500 hover:text-gray-900 rounded-full flex items-center justify-center h-8 w-8 transition', data: { action: 'click->quantity#decrement' } do %>
+          <%= icon(Rails.application.config.fa_style, 'minus') %>
+        <% end %>
+
+        <%= f.number_field :quantity, value: order_item.quantity || 1, min: 1, data: { quantity_target: 'value' }, class: 'w-12 p-1 bg-transparent border-0 text-gray-900 text-center text-base font-medium' %>
+
+        <%= button_tag type: 'button', class: 'p-1 bg-white text-gray-500 hover:text-gray-900 rounded-full flex items-center justify-center h-8 w-8 transition', data: { action: 'click->quantity#increment' } do %>
+          <%= icon(Rails.application.config.fa_style, 'plus') %>
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class="ml-4 w-full">
+      <% submit_label = order_item.new_record? ? "Add to order" : 'Update' %>
+      <%= submit_tag submit_label,
+        { class: 'btn btn-buy rounded-full', data: { turbo_submits_with: "Adding...".html_safe } }
+      %>
+    </div>
+  </div>
+  <%# End of Quantity and Submit %>
+<% end %>

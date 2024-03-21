@@ -1,0 +1,11 @@
+<span class="absolute top-0 right-0 left-0 bottom-0 h-full w-full inline-flex rounded items-center justify-center">
+  <% if organization.cover_image.attached? %>
+    <%= cl_image_tag(
+      organization.cover_image.key,
+      class: 'w-full h-full object-cover',
+      alt: "#{organization.name} cover image"
+    ) %>
+  <% else %>
+    <%= icon(Rails.application.config.fa_style, 'store', class: 'text-gray-500') %>
+  <% end %>
+</span>

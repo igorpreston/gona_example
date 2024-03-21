@@ -1,0 +1,7 @@
+<%= turbo_stream.remove(order_item.prefix_id) %>
+<%= turbo_stream.update(
+  :checkout_price_breakdown,
+  partial: 'storefront/orders/checkouts/price_breakdown',
+  locals: { order: }
+) %>
+<%= turbo_stream.update(:modal, '') %>

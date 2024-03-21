@@ -1,0 +1,172 @@
+<% content_for :title, 'Payment' %>
+
+<%= render layout: 'layouts/modal' do |f| %>
+  <div class="block">
+    <div class="mb-2">
+      <%= render partial: "payments/statuses/#{payment.status.underscore}", locals: { payment: } %>
+    </div>
+    <p class="text-2xl md:text-3xl font-semibold text-gray-900 leading-normal">
+      <%= payment.amount.format %>
+      <span class="text-gray-500 font-normal">
+        <%= payment.currency.upcase %>
+      </span>
+    </p>
+  </div>
+
+  <% if payment.uncaptured? %>
+    <div class="mt-8">
+      <div class="mt-8">
+        <div class="alert alert-info">
+          <p class="text-sm leading-normal font-normal">
+            <%= icon(Rails.application.config.fa_style, 'clock', class: 'mr-2') %>
+            This payment has not been captured yet. It will be captured once the order is ready.
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# Details %>
+  <div class="mt-8">
+    <div class="mb-2 pb-2 border-b border-gray-100">
+      <p class="text-sm text-gray-500 leading-normal font-normal">
+        Details:
+      </p>
+    </div>
+    <div class="grid grid-cols-1 gap-2">
+      <div class="flex justify-between items-center">
+        <span class="text-gray-900 leading-normal font-normal text-sm">
+          Currency:
+        </span>
+        <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+          <%= payment.currency.upcase %>
+        </span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-900 leading-normal font-normal text-sm">
+          Amount:
+        </span>
+        <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+          <%= payment.amount.format %>
+        </span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-900 leading-normal font-normal text-sm">
+          Fee:
+        </span>
+        <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+          <%= payment.application_fee.format %>
+        </span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-900 leading-normal font-normal text-sm">
+          Tax:
+        </span>
+        <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+          <%= payment.tax.format %>
+        </span>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="text-gray-900 leading-normal font-normal text-sm">
+          Tip:
+        </span>
+        <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+          <%= payment.tip.format %>
+        </span>
+      </div>
+    </div>
+  </div>
+  <%# End of Details %>
+
+  <%# Payment method %>
+  <% if payment.payment_method_details.present? %>
+    <div class="mt-8">
+      <div class="mb-2 pb-2 border-b border-gray-100">
+        <p class="text-sm text-gray-500 leading-normal font-normal">
+          Payment method:
+        </p>
+      </div>
+      <div class="grid grid-cols-1 gap-2">
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 leading-normal font-normal text-sm">
+            Brand:
+          </span>
+          <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+            <%= payment.payment_method_details['card']['brand'].capitalize %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 leading-normal font-normal text-sm">
+            Number:
+          </span>
+          <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+            •••• <%= payment.payment_method_details['card']['last4'] %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 leading-normal font-normal text-sm">
+            Exp. date:
+          </span>
+          <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+            <%= payment.payment_method_details['card']['exp_month'] %> / <%= payment.payment_method_details['card']['exp_year'] %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 leading-normal font-normal text-sm">
+            Country:
+          </span>
+          <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+            <%= payment.payment_method_details['card']['country'].upcase %>
+          </span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <%# End of Payment method %>
+
+  <%# Fraud analysis %>
+  <% if payment.outcome.present? %>
+    <div class="mt-8">
+      <div class="mb-2 pb-2 border-b border-gray-100">
+        <p class="text-sm text-gray-500 leading-normal font-normal">
+          Fraud analysis:
+        </p>
+      </div>
+      <div class="grid grid-cols-1 gap-2">
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 leading-normal font-normal text-sm">
+            Risk level:
+          </span>
+          <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+            <%= payment.outcome['risk_level'].humanize %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 leading-normal font-normal text-sm">
+            Risk score:
+          </span>
+          <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+            <%= payment.outcome['risk_score'] %>
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-900 leading-normal font-normal text-sm">
+            Network_status:
+          </span>
+          <span class="shrink-0 text-sm text-gray-900 leading-normal font-normal ml-4">
+            <%= payment.outcome['network_status'].humanize %>
+          </span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <%# End of Fraud analysis %>
+
+  <%# Refund %>
+  <% if payment.paid? %>
+    <div class="mt-12">
+      <%= button_to 'Refund', payment_transition_path(payment, status: :refunded), method: :patch, class: 'btn btn-primary w-full', data: { turbo_submits_with: "Processing...".html_safe } %>
+    </div>
+  <% end %>
+  <%# End of Refund %>
+<% end %>

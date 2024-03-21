@@ -1,0 +1,48 @@
+<%# Header %>
+<div class="block m-intro">
+  <div class="content-md">
+    <div class="block md:flex md:items-start md:justify-between">
+      <%# Heading %>
+      <div class="w-full flex-grow flex items-start">
+        <%# Back button %>
+        <% if local_assigns.has_key?(:back_url) %>
+          <div class="mr-4 shrink-0">
+            <%= link_to back_url, class: 'btn' do %>
+              <%= icon(Rails.application.config.fa_style, "arrow-left") %>
+            <% end %>
+          </div>
+        <% end %>
+        <%# End of Back button %>
+
+        <%# Title %>
+        <div class="flex items-center flex-wrap">
+          <div class="flex-grow">
+            <h1 class="text-2xl font-semibold leading-normal text-gray-900">
+              <%= content_for(:heading) %>
+            </h1>
+            <p class="text-sm text-gray-500 leading-normal mt-2 font-normal max-w-xl">
+              <%= content_for(:subheading) %>
+            </p>
+          </div>
+        </div>
+        <%# End of Title %>
+      </div>
+      <%# End of Heading %>
+
+      <%# Actions %>
+      <% if local_assigns.has_key?(:actions) %>
+        <div class="shrink-0 flex flex-wrap mt-4 md:mt-0 md:ml-4">
+          <div class="-m-2">
+            <% actions.map do |action| %>
+              <span class="p-2 shrink-0">
+                <%= action %>
+              </span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <%# End of Actions %>
+    </div>
+  </div>
+</div>
+<%# End of Header %>

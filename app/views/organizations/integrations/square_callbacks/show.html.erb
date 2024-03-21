@@ -1,0 +1,15 @@
+<% content_for :title, 'Integrations' %>
+<% content_for :heading, 'Integrations' %>
+
+<%= render partial: 'organizations/header', locals: { back_url: organization_integrations_path } %>
+
+<div class="block">
+  <div class="content">
+    <p>
+      Integration
+    </p>
+    <p>
+      <%= response.inspect %>
+    </p>
+  </div>
+</div>

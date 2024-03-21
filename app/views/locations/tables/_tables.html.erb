@@ -1,0 +1,14 @@
+<div class="grid grid-cols-1 gap-2 -m-2">
+  <% if location.tables_count.positive? %>
+    <%= render partial: 'locations/tables/table', collection: tables, locals: { location: } %>
+  <% else %>
+    <%= render partial: 'components/empty_state', locals: {
+      icon: 'table-picnic',
+      title: 'No tables yet',
+      description: 'Add your first table to get started.',
+      buttons: [
+        link_to('Add first table', new_location_table_path(location), class: 'btn btn-primary', data: { turbo_frame: :modal })
+      ]
+    } %>
+  <% end %>
+</div>

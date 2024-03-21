@@ -1,0 +1,41 @@
+en:
+  dashboard:
+    onboarding:
+      title: Welcome to GONA 🎉
+      subtitle: Use this personalized guide to get your store up and running in 10 minutes.
+      category:
+        organization_inventory: Let's build your storefront
+        organization_settings: Finish setting up your business
+      task:
+        organization_settings:
+          complete_stripe_onboarding:
+            title: Complete Stripe Onboarding
+            description: Connect your Stripe account to start accepting payments. You'll be able to accept all major credit cards and mobile wallets.
+            cta: Connect Stripe
+
+          create_integration:
+            title: Add Integrations
+            description: Sync your orders and inventory with your existing systems. Connect your store with your favorite POS, accounting, and delivery partners.
+            cta: Browse Integrations
+          create_subscription:
+            title: Subscribe
+            description: Unlock the full potential of your store by subscribing to a plan. Get access to advanced features and support to help you grow your business.
+            cta: View Plans
+          create_location:
+            title: Add Your First Location
+            description: Define your first location to start accepting orders. Set your delivery radius and operating hours to start serving your customers.
+            cta: Create New Location
+
+        organization_inventory:
+          create_product:
+            title: Add your first product
+            description: Introduce your unique offerings by adding your very first product. Showcase its details, images, and descriptions to captivate customers' attention.
+            cta: Add New Product
+          create_category:
+            title: Add Your First Category
+            description: Organize your products efficiently by creating your inaugural category. Group related items together to simplify navigation for your customers.
+            cta: Create New Category
+          create_menu:
+            title: Add Your First Menu
+            description: Craft your initial menu by assembling your categories and products. Define the culinary experience you'll be sharing with your customers.
+            cta: Build New Menu

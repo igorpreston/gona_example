@@ -1,0 +1,84 @@
+<% content_for :title, 'Manage account plan' %>
+<% content_for :heading, 'Manage account plan' %>
+
+<% products = [
+  {
+    name: 'Premium monthly',
+    price: 'CA$399',
+    duration: 'per month',
+    color: 'bg-indigo-100',
+    price_id: 'price_1O6ivBBNuHxxW4i5TY1wZM7m'
+  },
+  {
+    name: 'Premium yearly',
+    price: 'CA$4,389',
+    duration: 'per year',
+    color: 'bg-pink-100',
+    price_id: 'price_1O6ivBBNuHxxW4i50LwDo78h'
+  }
+] %>
+
+
+<%= render partial: 'organizations/header', locals: { back_url: edit_organization_path } %>
+
+<div class="mt-8 block">
+  <div class="content-md">
+    <div class="grid grid-cols-1 gap-8">
+      <% products.map do |product| %>
+        <div class="col card overflow-hidden">
+          <div class="<%= product[:color] %> px-6 py-14">
+            <p class="text-3xl font-semibold text-gray-900">
+              <%= product[:name] %>
+            </p>
+          </div>
+          <div class="card-body">
+            <ul class="grid grid-cols-1 gap-4">
+              <li class="col">
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'check-circle',
+                  class: 'text-green-500 mr-2'
+                ) %>
+                <span class="text-gray-900 font-normal text-sm">
+                  Unlimited users
+                </span>
+              </li>
+              <li class="col">
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'check-circle',
+                  class: 'text-green-500 mr-2'
+                ) %>
+                <span class="text-gray-900 font-normal text-sm">
+                  Cancel anytime
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <div class="shrink-0">
+                <p class="text-gray-900 text-base font-medium leading-normal">
+                  <%= product[:price] %>
+                </p>
+                <p class="text-gray-500 text-sm leading-normal">
+                  <%= product[:duration] %>
+                </p>
+              </div>
+              <div class="shrink-0 ml-4">
+                <% if current_tenant.subscription&.stripe_plan_id == product[:price_id] %>
+                  <span class="text-gray-500 text-sm leading-normal">
+                    Current plan
+                  </span>
+                <% else %>
+                  <%= button_to 'Select', subscription_checkout_path(price_id: product[:price_id]), method: :post, data: { turbo: false }, class: 'btn btn-dark btn-md' %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

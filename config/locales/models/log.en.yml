@@ -1,0 +1,11 @@
+en:
+  logs:
+    order:
+      created: "Created"
+      submitted: "Placed"
+      in_progress: "In Progress"
+      ready_for_take_out: "Ready for Pickup"
+      ready_for_delivery: "Ready for Delivery"
+      ready_for_dine_in: "Coming to table"
+      completed: "Completed"
+      cancelled: "Cancelled"

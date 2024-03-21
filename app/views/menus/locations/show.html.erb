@@ -1,0 +1,14 @@
+<%= turbo_frame_tag :menu_locations do %>
+  <div class="grid grid-cols-1 gap-4">
+    <% if menu.locations_count.positive? %>
+      <%= render partial: 'locations/row', collection: @locations, as: :location %>
+      <div class="mt-2">
+        <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+      </div>
+    <% else %>
+      <div class="text-sm text-gray-500 leading-normal text-center">
+        Nothing here yet
+      </div>
+    <% end %>
+  </div>
+<% end %>

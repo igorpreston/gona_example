@@ -1,0 +1,12 @@
+<% content_for :title, 'New table' %>
+<% content_for :heading, 'New table' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render partial: 'locations/tables/form', locals: { table: } %>
+  </div>
+<% end %>

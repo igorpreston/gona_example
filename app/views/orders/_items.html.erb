@@ -1,0 +1,40 @@
+<ul class="grid grid-cols-1 gap-6 min-w-full">
+  <% order_items.each do |oi| %>
+    <li class="w-full">
+      <div class="flex">
+        <span class="flex-shrink-0 mr-4 h-12 w-12 lg:h-16 lg:w-16 text-xl text-gray-500 bg-gray-100 rounded overflow-hidden">
+          <%= render partial: 'items/photo', locals: { item: oi.item } %>
+        </span>
+        <div class="mt-3 lg:mt-5 w-full grid grid-cols-1 md:grid-cols-12 gap-2">
+
+          <div class="md:col-span-4">
+            <p class="text-base text-gray-900 font-medium leading-normal w-full">
+              <%= oi.item.name %>
+              <span class="text-gray-500 text-sm">
+                x <%= oi.quantity %>
+              </span>
+            </p>
+          </div>
+
+          <div class="md:col-span-6 xl:col-span-4">
+            <p class="text-sm text-gray-500 leading-normal font-normal max-w-xl">
+              Special instructions: Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores tempora aliquid, sapiente ut voluptate aperiam placeat quaerat laboriosam distinctio. Labore nihil doloribus beatae tempora quidem optio praesentium asperiores pariatur quod?
+            </p>
+          </div>
+
+          <div class="md:col-span-2 xl:col-span-4  md:text-right">
+            <p class="text-sm text-gray-500 font-normal">
+              <%= oi.item.price.format %> <%= oi.item.currency.upcase %>
+            </p>
+            <p class="text-base font-medium text-gray-900 leading-normal">
+              <%= (oi.item.price * oi.quantity).format %>
+              <span class="text-gray-500 leading-normal font-normal">
+                <%= order.location&.currency&.upcase %>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </li>
+  <% end %>
+</ul>

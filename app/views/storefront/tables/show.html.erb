@@ -1,0 +1,108 @@
+<% content_for :title, table.name %>
+<% content_for :head do %>
+  <%= javascript_include_tag "https://js.stripe.com/v3/", data: { turbolinks_track: 'reload' } %>
+<% end %>
+
+<%= render partial: 'storefront/locations/heading', locals: { location:, organization: } %>
+
+<%# Heading %>
+<div class="block mt-4">
+  <div class="content-sm text-center">
+    <p class="text-base text-gray-500 leading-normal font-normal">
+      <%= table&.name %>
+    </p>
+  </div>
+</div>
+<%# End of Heading %>
+
+<%# Menu %>
+<div class="block mt-8">
+  <div class="content-sm">
+    <div class="text-center">
+      <%= link_to location_path(location, table_id: table.prefix_id),
+        class: 'w-full btn btn-secondary btn-lg rounded-full text-gray-900' do
+      %>
+        <%= icon(
+          Rails.application.config.fa_style,
+          'book-open',
+          class: 'mr-2'
+        ) %>
+        View the menu
+      <% end %>
+    </div>
+  </div>
+</div>
+<%# End of Menu %>
+
+<%# Current Table Order %>
+<% if order&.items_count&.positive? %>
+  <div class="block mt-12">
+    <div class="content-sm">
+      <div class="mb-6 border-b border-gray-200 pb-2 flex justify-between">
+        <div class="grow shrink w-full">
+          <p class="text-sm text-gray-900 leading-normal font-medium">
+            Current table order
+          </p>
+        </div>
+      </div>
+      <div class="block">
+        <%= render partial: 'storefront/locations/orders/order_items/order_items', locals: {
+          order_items: order.order_items.includes(:note), location:
+        } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="block mt-4">
+    <div class="content-sm">
+      <%= render partial: 'storefront/locations/orders/price_breakdown', locals: {
+        order:
+      } %>
+    </div>
+  </div>
+
+  <div class="block mt-12">
+    <div class="content-sm">
+      <div class="mb-6 text-center">
+        <p class="text-sm text-gray-900 leading-normal font-medium">
+          <%= icon(
+            Rails.application.config.fa_style,
+            'lock',
+            class: 'mr-1'
+          ) %>
+          secure payments with GONA
+        </p>
+      </div>
+      <div class="block">
+        <%= link_to order_checkout_processor_path(order), data: { turbo_frame: :modal }, class: 'w-full btn btn-dark btn-lg rounded-full' do %>
+          <%= icon(
+            Rails.application.config.fa_style,
+            'credit-card',
+            class: 'mr-2'
+          ) %>
+          Pay or split bill
+        <% end %>
+      </div>
+      <div class="mt-6 max-w-xs mx-auto">
+        <div class="flex flex-wrap justify-between -m-4">
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-visa') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-mastercard') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-amex') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'cc-apple-pay') %>
+          </div>
+          <div class="p-4 shrink-0 text-2xl text-gray-900 leading-normal font-normal">
+            <%= icon('fab', 'google-pay') %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+<%# End of Current Table Order %>

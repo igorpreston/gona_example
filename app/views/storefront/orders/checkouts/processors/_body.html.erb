@@ -1,0 +1,46 @@
+<% if order.dine_in? %>
+  <% unless order.payment_split_type? %>
+    <div class="grid grid-cols-1 gap-6">
+      <div class="col">
+        <%= button_to order_path(order, payment_split_type: :by_item),
+          method: :put,
+          class: 'btn btn-dark btn-lg w-full' do
+        %>
+          Pay for your items
+        <% end %>
+      </div>
+      <div class="col">
+        <%= button_to order_path(order, payment_split_type: :equal),
+          method: :put,
+          class: 'btn btn-dark btn-lg w-full' do
+        %>
+          Divide the bill equally
+        <% end %>
+      </div>
+      <div>
+        <%= button_to order_path(order, payment_split_type: :by_order),
+          method: :put,
+          class: 'btn btn-dark btn-lg w-full' do
+        %>
+          Pay in full
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="block">
+      <%= render partial: "storefront/orders/checkouts/payment_splits/#{order.payment_split_type&.underscore}", locals: {
+        order:
+      } %>
+    </div>
+  <% end %>
+<% else %>
+  <% if @order.order_users.find_by(id: session[:order_user_id])&.phone.present? %>
+    <%= turbo_frame_tag :order_payment, src: order_checkout_stripe_payment_path(order), lazy: true do %>
+      <%= render partial: 'components/loading' %>
+    <% end %>
+  <% else %>
+    <%= turbo_frame_tag :order_user, src: order_checkout_order_user_path(order), lazy: true do %>
+      <%= render partial: 'components/loading' %>
+    <% end %>
+  <% end %>
+<% end %>

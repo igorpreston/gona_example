@@ -1,0 +1,38 @@
+<%= turbo_frame_tag "#{option.prefix_id}_option",
+  data: { sortable_update_url: modifier_option_position_path(modifier, option) } do
+%>
+  <% item = option.item %>
+
+  <%= link_to edit_modifier_option_path(modifier, option), class: 'block', data: { turbo_frame: :modal } do %>
+    <div class="flex items-center">
+
+      <%# Drag and Drop %>
+      <span class="w-8 h-8 flex items-center justify-center rounded shrink-0 cursor-grab mr-2 hover:bg-gray-50 transition text-gray-500" id="tickleMe">
+        <%= icon(Rails.application.config.fa_style, 'grip-dots-vertical') %>
+      </span>
+      <%# End of Drag and Drop %>
+
+      <div class="flex-grow items-center flex">
+        <div class="overflow-hidden rounded relative bg-gray-100 text-gray-500 text-2xl shrink-0 mr-4 h-14 w-14">
+          <%= render partial: 'items/photo', locals: { item: } %>
+        </div>
+        <div class="flex-grow flex items-center justify-between">
+          <div class="">
+            <%= item.name %>
+          </div>
+          <div class="shrink-0 ml-4">
+            <p class="text-base text-gray-900 leading-normal font-medium">
+              <%= item.price&.format %>
+              <span class="text-gray-500 font-normal">
+                <%= item.currency&.upcase %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  <% end %>
+
+<% end %>

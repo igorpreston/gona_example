@@ -1,0 +1,13 @@
+<% content_for :title, 'New modifier' %>
+<% content_for :heading, 'New modifier' %>
+
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render 'form', modifier: %>
+  </div>
+<% end %>

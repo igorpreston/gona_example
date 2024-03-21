@@ -1,0 +1,63 @@
+<% content_for :title, "Feedback" %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <div class="text-center mb-6">
+      <h2 class="text-2xl text-gray-900 leading-normal font-medium">
+        Rate your experience at <%= order.organization&.name %>
+      </h2>
+    </div>
+    <%= form_with model: order_user.build_feedback,
+      url: order_order_user_feedback_path(order, order_user),
+      method: :post,
+      data: { turbo: false } do |f|
+    %>
+      <div class="grid grid-cols-1 gap-6">
+        <div class="flex items-center justify-center -m-2" data-controller="rating" data-rating-value="0">
+          <% (Feedback::MIN_RATING + 1..Feedback::MAX_RATING).each do |value| %>
+            <span class="cursor-pointer transition p-2 text-3xl" data-action="click->rating#setRating" data-rating-value="<%= value %>" data-target="rating.star"><%= icon('fa-solid', 'star') %></span>
+          <% end %>
+          <%= f.hidden_field :rating, data: { target: "rating.value" } %>
+        </div>
+        <%# End of Stars %>
+        <%# Textarea %>
+        <div class="col">
+          <%= f.text_area :content, class: 'input min-h-[140px]', autofocus: false, data: { controller: 'textarea-autogrow', character_counter_target: 'input' }, placeholder: "What was so special about #{order.organization.name}? Let the world know!" %>
+        </div>
+        <%# End of Textarea %>
+        <%# Notify %>
+        <div class="col">
+          <div class="grid grid-cols-12 gap-2 w-full">
+            <div class="col-span-2 text-center">
+              <%= f.check_box :notify, type: 'checkbox', class: 'checkbox', checked: false %>
+            </div>
+            <div class="col-span-10 flex items-center">
+              <%= f.label :notify, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+                Would you like to get a response by SMS?
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <%# End of Notify %>
+        <%# Submit %>
+        <div class="col">
+          <%= submit_tag "Continue",
+            { class: 'btn-lg btn-green btn-lg w-full', data: { turbo_submits_with: "Sending...".html_safe } }
+          %>
+        </div>
+        <%# End of Submit %>
+        <%# Terms %>
+        <div class="col text-center">
+          <p class="text-xs text-green-900 leading-normal font-normal">
+            By clicking Continue, I agree that GONA may publicly share this review along with my name and order history for promotional purposes. This review is true and reflects my experience with this merchant.
+          </p>
+        </div>
+        <%# End of Terms %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,25 @@
+<div
+  class="block"
+  id="nestedFormWrapper"
+  data-new-record="<%= f.object.new_record? %>"
+>
+  <%= f.fields_for :item, f.object.item || Item.new do |ff| %>
+    <div class="grid grid-cols-12 gap-2">
+      <div class="col-span-6 md:col-span-8">
+        <%= ff.text_field :name, placeholder: 'Name', class: 'input' %>
+      </div>
+      <div class="col-span-4 md:col-span-3 relative">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <span class="text-gray-500 sm:text-base">$</span>
+        </div>
+        <%= ff.text_field :price, placeholder: 'Price', class: 'input pl-8' %>
+      </div>
+      <div class="col-span-2 md:col-span-1 flex items-center justify-center">
+        <%= f.hidden_field :_destroy %>
+        <%= button_tag type: 'button', data: { action: 'nested-form#remove' } do %>
+          <%= icon(Rails.application.config.fa_style, 'trash-alt', class: 'text-gray-500 p-1 hover:text-gray-900 transition') %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

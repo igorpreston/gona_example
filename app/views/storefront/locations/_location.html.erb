@@ -1,0 +1,37 @@
+<div class="col" id="<%= location.prefix_id %>">
+  <meta itemprop="name" content="something about this location">
+  <meta itemprop="position" position="<%= location_iteration.index + 1 %>">
+  <meta itemprop="url" content="<%= location_path(location) %>">
+
+  <div class="overflow-hidden">
+    <%= link_to location, class: 'block' do %>
+      <div class="relative rounded h-20 bg-gray-50 overflow-hidden" style="padding-bottom: 50%; display:block;">
+        <%= render partial: 'organizations/cover_image', locals: { organization: location.organization } %>
+      </div>
+      <div class="mt-2 flex items-start justify-between">
+        <div class="shrink-0 mr-2">
+          <span class="h-8 w-8 overflow-hidden bg-gray-100 rounded-full inline-flex">
+            <%= render partial: 'organizations/logo', locals: { organization: location.organization } %>
+          </span>
+        </div>
+        <div class="block w-full">
+          <div class="block relative text-left">
+            <p class="text-base font-medium leading-normal">
+              <%= location.organization.name %>
+            </p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500 leading-normal">
+              <%= location.open? ? '10-20 mins' : 'Closed' %> • 1.2 km
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center ml-4">
+          <span class="bg-gray-100 flex items-center py-1 px-2 text-xs text-gray-900 font-normal leading-normal rounded-full">
+            <%= location.rating.round(1) %>
+          </span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

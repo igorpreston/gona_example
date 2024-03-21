@@ -1,0 +1,3 @@
+<%= turbo_frame_tag :orders_fulfillment_time do %>
+  <% fulfillment_time.zero? ? '--' : pluralize(fulfillment_time, 'min') %>
+<% end %>

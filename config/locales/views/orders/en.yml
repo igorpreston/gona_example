@@ -1,0 +1,20 @@
+en:
+  orders:
+    index:
+      title: Orders
+      heading: Orders
+    statuses:
+      label:
+        in_progress: In progress
+        cancelled: Cancelled
+        completed: Completed
+        draft: Draft
+        payment_failed: Payment failed
+        ready: Ready
+        submitted: Submitted
+      tooltip:
+        in_progress: "In progress at %{date}"
+        cancelled: "Cancelled at %{date}"
+        completed: "Completed at %{date}"
+        ready: "Ready since %{date} (%{time} ago)"
+        submitted: "Submitted at %{date}"

@@ -1,0 +1,76 @@
+<div class="relative block">
+
+  <%# Pickup information %>
+  <div class="mt-6 pt-6 border-t-2">
+    <div class="mb-6 flex justify-between">
+      <div class="w-full">
+        <p class="text-lg font-medium text-gray-900 leading-normal">
+          Pickup estimate
+        </p>
+      </div>
+
+      <div class="shrink-0 ml-4">
+        <p class="text-lg font-semibold text-gray-900 leading-normal">
+          ~ <%= location.ready_in_minutes? %> minutes
+        </p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white ring-2 ring-gray-900 rounded p-4 md:p-6 block w-full">
+          <p class="text-base text-gray-900 leading-normal font-normal">
+            <%= icon(Rails.application.config.fa_style, 'clock', class: 'mr-2') %>
+            ASAP Pick up - <%= pluralize(location.ready_in_minutes?, 'minute') %>
+          </p>
+        </div>
+        <div class="bg-white ring-2 ring-gray-100 rounded p-4 md:p-6 block w-full">
+          <p class="text-base text-gray-900 leading-normal font-normal">
+            <%= icon(Rails.application.config.fa_style, 'clock', class: 'mr-2') %>
+            Schedule
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 pt-6 border-t-2">
+    <div class="mb-6 flex justify-between items-center">
+      <div class="w-full">
+        <p class="text-lg font-medium text-gray-900 leading-normal">
+          Your items (<%= order.items_count %>)
+        </p>
+      </div>
+
+      <div class="shrink-0 ml-4">
+        <%= link_to 'Add items', location %>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-6">
+      <% order.order_items.each do |oi| %>
+        <div class="flex justify-between w-full">
+          <div class="shrink-0 mr-4">
+            <span class="rounded-full min-w-[30px] h-[30px] px-2 py-1 bg-gray-200 flex items-center justify-center text-sm leading-normal font-normal text-gray-900">
+              <%= oi.quantity %> <%= icon(Rails.application.config.fa_style, 'chevron-down', class: 'ml-2') %>
+            </span>
+          </div>
+          <div class="w-full">
+            <p class="text-sm text-gray-900 leading-normal font-normal">
+              <%= oi.item.name %>
+            </p>
+            <p class="text-sm text-gray-900 leading-normal font-normal mt-1">
+              -
+              <span class="font-semibold">
+                Does it have a long name?
+              </span>
+              Yes
+            </p>
+          </div>
+          <div>
+            <%= Money.new(oi.amount_cents, location.currency).format %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

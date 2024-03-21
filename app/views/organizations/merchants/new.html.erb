@@ -1,0 +1,46 @@
+<% content_for :title, 'New organization member' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <%= form_for(Merchant.new, url: organization_merchants_path, method: :post, html: { class: 'max-w-lg' }) do |f| %>
+    <div class="grid grid-cols-1 gap-4 md:gap-6">
+      <div class="col grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div class="col">
+          <div class="mb-2">
+            <%= f.label :first_name, 'First name', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.text_field :first_name, class: 'input', autofocus: true %>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="mb-2">
+            <%= f.label :last_name, 'Last name', class: 'label' %>
+          </div>
+          <div class="block">
+            <%= f.text_field :last_name, class: 'input' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="mb-2">
+          <%= f.label :email, 'Email', class: 'label' %>
+        </div>
+        <div class="block">
+          <%= f.email_field :email, class: 'input' %>
+        </div>
+      </div>
+
+      <div class="col">
+        <%= submit_tag "Send invitation",
+          { class: 'btn btn-primary w-full', data: { turbo_submits_with: "Sending...".html_safe } }
+        %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

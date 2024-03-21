@@ -1,0 +1,46 @@
+<%= form_with model: organization, url: organization_general_path, method: :put, local: true do |f| %>
+  <div class="grid grid-cols-1 gap-4 md:gap-6">
+    <div class="col grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+      <div class="col">
+        <div class="mb-2">
+          <%= f.label :name, 'Brand name', class: 'label' %>
+        </div>
+        <div class="block">
+          <%= f.text_field :name, value: current_tenant.name, class: 'input' %>
+        </div>
+        <div class="block mt-2">
+          <p class="tip">
+            Your customers will see this name everywhere on GONA. It should be the name your customers know you by.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" data-controller="character-counter" data-character-counter-countdown-value="true">
+      <div class="block mb-2">
+        <%= f.label :description, 'Description', class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_area :description, value: current_tenant.description, class: 'input', data: { controller: 'textarea-autogrow', character_counter_target: 'input' }, maxlength: Organization::DESCRIPTION_LENGTH %>
+      </div>
+      <div class="block mt-2">
+        <p class="tip">
+          There are
+          <strong data-character-counter-target="counter"></strong>
+          characters in this textarea.
+        </p>
+      </div>
+    </div>
+
+    <div class="col flex w-full items-center justify-end">
+      <span class="shrink-0 ml-4">
+        <%= link_to 'Cancel', organization_general_path, class: 'text-sm text-gray-500 leading-normal font-normal hover:text-gray-900 transition' %>
+      </span>
+      <span class="shrink-0 ml-4">
+        <%= submit_tag "Save",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Uploading...".html_safe } }
+        %>
+      </span>
+    </div>
+  </div>
+<% end %>

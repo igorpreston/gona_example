@@ -1,0 +1,11 @@
+<%= turbo_stream.update(
+  :category_items,
+  partial: 'categories/category_items',
+  locals: { category:, category_items: category.category_items }
+) %>
+<%= turbo_stream.remove(category_item&.item&.prefix_id) %>
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'Item removed from category' } }
+) %>

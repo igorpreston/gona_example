@@ -1,0 +1,12 @@
+<% content_for :title, category.name %>
+<% content_for :heading, category.name %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render 'form', category:, url: category_path(category) %>
+  </div>
+<% end %>

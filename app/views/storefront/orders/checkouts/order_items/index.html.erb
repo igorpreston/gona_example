@@ -1,0 +1,5 @@
+<%= turbo_frame_tag :order_items do %>
+  <div class="grid grid-cols-1 gap-2">
+    <%= render partial: 'storefront/orders/checkouts/order_items/order_item', collection: order_items, order: %>
+  </div>
+<% end %>

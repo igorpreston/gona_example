@@ -1,0 +1,5 @@
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'Account information updated.' } }
+) %>

@@ -1,0 +1,25 @@
+<%= turbo_frame_tag qr_code.prefix_id do %>
+  <%= link_to organization_qr_code_path(qr_code), class: 'block hover:bg-gray-100', data: { turbo_frame: :modal } do %>
+    <div class="flex items-center py-3 px-4 md:px-6">
+      <span class="h-16 w-16 shrink-0 rounded-xl bg-gray-100 relative flex items-center justify-center text-2xl text-gray-500 leading-normal font-normal overflow-hidden ring-1 ring-gray-200">
+        <%= render partial: 'organizations/qr_codes/label', locals: { qr_code: } %>
+      </span>
+      <div class="ml-4 w-full grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-8">
+        <div class="md:col-span-8">
+          <p class="text-base text-gray-900 leading-normal font-normal">
+            <%= qr_code.name? ? qr_code.name : "##{qr_code.code}" %>
+          </p>
+          <p class="mt-1 text-sm text-gray-500 leading-normal font-normal">
+            <%= icon(Rails.application.config.fa_style, 'location-dot') %>
+            <%= qr_code.location&.name %>
+          </p>
+        </div>
+        <div class="md:col-span-4 md:text-right">
+          <span class="text-sm text-gray-500 leading-normal font-normal">
+            <%= qr_code.created_at.to_fs(:short) %>
+          </span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

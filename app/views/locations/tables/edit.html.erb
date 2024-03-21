@@ -1,0 +1,12 @@
+<% content_for :title, "Table #{table.prefix_id}" %>
+<% content_for :heading, "Table #{table.prefix_id}" %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render partial: 'locations/tables/form', locals: { table: } %>
+  </div>
+<% end %>

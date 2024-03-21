@@ -1,0 +1,25 @@
+<%= content_for :heading, 'Reset your password' %>
+<%= content_for :subheading do %>
+  Enter your new password below.
+<% end %>
+
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'grid grid-cols-1 gap-4' }, data: { turbo: false }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= f.hidden_field :reset_password_token %>
+
+  <div>
+    <%= f.password_field :password, autocomplete: 'new-password', autofocus: true, required: true, class: 'input-auth', placeholder: 'New password' %>
+    <div class="mt-2">
+      <p class="tip">
+        <em>(<%= @minimum_password_length %> characters minimum)</em>
+      </p>
+    </div>
+  </div>
+  <div>
+    <%= f.password_field :password_confirmation, autocomplete: 'new-password', required: true, class: 'input-auth', placeholder: 'Confirm new password' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit 'Save new password', class: 'flex w-full justify-center rounded border border-transparent bg-blue-600 p-3 sm:p-4 text-md font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 cursor-pointer', data: { turbo: false } %>
+  </div>
+<% end %>

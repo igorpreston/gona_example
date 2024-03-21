@@ -1,0 +1,42 @@
+<%= turbo_frame_tag :order_user do %>
+  <div class="block">
+    <%= form_with model: user, url: order_checkout_user_path(order, directory: params[:directory]) do |f| %>
+      <div class="grid grid-cols-1 gap-6">
+        <%# Phone number %>
+        <div class="col">
+          <div class="mb-2">
+            <%= f.label :phone, 'Phone number', class: 'label' %>
+          </div>
+          <div class="grid grid-cols-12 gap-2">
+            <div class="col-span-4">
+              <%= f.select :phone_country_code,
+                options_for_select(
+                  ISO3166::Country.all.map do |c|
+                    ["+ #{c.country_code} #{c.iso_short_name}", c.alpha2]
+                  end, 'CA'
+                ), {}, class: 'input', id: 'cardholder-phone-code'
+              %>
+            </div>
+            <div class="col-span-8">
+              <%= f.phone_field :phone, class: 'input', id: 'cardholder-phone-number' %>
+            </div>
+          </div>
+          <div class="mt-2">
+            <p class="text-xs text-gray-900 leading-normal font-normal">
+              By submitting your number here, you agree to receive messages related to your order, including receipts and status updates. Message frequency may vary. Message & Data Rates May Apply.
+            </p>
+          </div>
+        </div>
+        <%# End of Phone number %>
+
+        <%# Submit %>
+        <div class="col">
+          <%= submit_tag "Continue",
+            { class: 'btn btn-primary btn-md w-full rounded-full', data: { turbo_submits_with: "Loading...".html_safe } }
+          %>
+        </div>
+        <%# End of Submit %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

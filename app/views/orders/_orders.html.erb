@@ -1,0 +1,140 @@
+<% local_assigns[:headers] = true if local_assigns[:headers].nil? %>
+
+<div class="card overflow-hidden">
+  <div class="card-container">
+    <% if orders&.size&.positive? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-100" cellpadding="0" cellspacing="0" border="0">
+          <% if headers %>
+            <thead>
+              <tr class="h-full text-gray-500 text-xs uppercase font-normal leading-normal">
+                <th scope="col" class="h-px w-px" style="min-width: 120px;">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="sr-only font-normal leading-normal">
+                      Status
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px w-px" style="min-width: 120px;">
+                  <div class="py-2.5 pl-4 pr-3 sm:pl-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Order #
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px w-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Type
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Items
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Platform
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Location
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px w-px">
+                  <div class="py-2.5 pl-3 pr-4 sm:pr-3 text-right">
+                    <span class="font-normal leading-normal text-right">
+                      Submitted
+                    </span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+          <% end %>
+          <tbody class="divide-y divide-gray-100">
+            <% orders&.each do |order| %>
+              <tr class="bg-white hover:bg-gray-50 transition">
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to order, id: order.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <%= render partial: "orders/statuses/#{order.status.downcase.underscore}", locals: { order: } %>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to order, id: order.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full py-4 pl-4 pr-3 sm:pl-3 flex items-center">
+                      <span class="text-base text-gray-900 leading-normal font-medium overflow-auto">
+                        #<%= order.number %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to order, id: order.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-500 leading-normal">
+                        <%= order.preference.humanize %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to order, id: order.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-900 leading-normal">
+                        <%= pluralize(order.items_count, 'item') %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to order, id: order.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="tag">
+                        <%= order.platform.humanize %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to order, id: order.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-900 leading-normal">
+                        <%= order.location&.name %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to order, id: order.prefix_id, class: 'h-full block', data: { turbo_frame: :modal } do %>
+                    <div class="h-full flex items-center justify-end py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-500 leading-normal font-normal">
+                        <%= order.submitted_at&.localtime&.to_fs(:short) %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <%= render partial: 'components/empty_state', locals: {
+        icon: 'inbox-in',
+        title: 'No orders',
+        description: 'You do not have any orders yet.'
+      } %>
+    <% end %>
+  </div>
+</div>

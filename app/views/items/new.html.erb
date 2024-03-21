@@ -1,0 +1,12 @@
+<% content_for :title, 'New item' %>
+<% content_for :heading, 'New item' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render 'form', item: %>
+  </div>
+<% end %>

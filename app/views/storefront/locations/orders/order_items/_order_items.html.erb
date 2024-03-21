@@ -1,0 +1,67 @@
+<div class="grid grid-cols-1 gap-6">
+  <% order_items.includes(:item).each do |oi| %>
+    <%= turbo_frame_tag oi.prefix_id do %>
+      <div class="flex items-start">
+        <span class="h-[26px] min-w-[26px] relative bg-gray-100 rounded flex items-center justify-center text-gray-900 leading-normal text-xs shrink-0 mr-3 p-1.5">
+          <%= oi.quantity %>
+        </span>
+
+        <div class="mt-0.5 grow shrink w-full">
+          <div class="shrink grow flex w-full">
+            <div class="shrink grow w-full">
+              <div class="block">
+                <p class="text-gray-900 font-normal leading-normal text-sm">
+                  <%= oi.item&.name %>
+                </p>
+              </div>
+            </div>
+            <div class="shrink-0 ml-3">
+              <p class="text-gray-900 text-sm font-normal leading-normal">
+                <%= Money.new(oi.total_with_options_cents, location&.currency).format %>
+              </p>
+            </div>
+          </div>
+
+          <% if oi.modifiers_count.positive? %>
+            <div class="mt-3 grid grid-cols-1 gap-4">
+              <% oi.applied_options.includes([:item]).each do |ao| %>
+                <div class="flex items-center">
+                  <span class="shrink-0 mr-3 text-gray-500 text-sm leading-normal">
+                    <%= icon(
+                      Rails.application.config.fa_style,
+                      'arrow-turn-down-right'
+                    ) %>
+                  </span>
+                  <div class="grow shrink w-full">
+                    <p class="text-gray-500 font-normal leading-normal text-sm">
+                      <%= ao.item&.name %>
+                      (<%= ao.item&.price_cents.positive? ? ao.item&.price.format : 'free' %>)
+                    </p>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <% if oi.note.present? %>
+            <div class="mt-3 block">
+              <p class="text-sm text-gray-500 leading-normal font-normal">
+                <%= oi.note.body %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+
+        <% if local_assigns.has_key?(:destroy_btn) && destroy_btn %>
+          <div class="shrink-0 ml-3">
+            <%= button_to location_order_order_item_path(location, order, oi), method: :delete, class: 'h-7 w-7 bg-gray-100 rounded-full text-gray-900 hover:text-red-600 transition transition p-0.5 text-sm leading-normal font-normal' do %>
+              <%= icon(
+                Rails.application.config.fa_style,
+                'xmark'
+              ) %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

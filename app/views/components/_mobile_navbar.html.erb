@@ -1,0 +1,83 @@
+<%
+  main_links = [
+    # {
+    #   label: t('subnav.links.home'),
+    #   path: root_path,
+    #   active: :exact,
+    #   icon: 'grid-2'
+    # },
+    {
+      label: 'Dashboard',
+      path: orders_path,
+      active: :inclusive,
+      icon: 'inbox'
+    },
+    {
+      label: t('subnav.links.menus'),
+      path: menus_path,
+      active: [['menus', 'categories', 'modifiers', 'items'], []],
+      icon: 'book-open'
+    },
+    {
+      label: t('subnav.links.locations'),
+      path: locations_path,
+      active: :inclusive,
+      icon: 'map-location'
+    },
+    {
+      label: 'Feedback',
+      path: feedbacks_path,
+      active: :inclusive,
+      icon: 'comments'
+    },
+    {
+      label: 'Settings',
+      path: edit_organization_path,
+      icon: 'cog'
+    }
+  ]
+%>
+
+<div class="block mx-auto p-4 pointer-events-none fixed bottom-0 right-0 left-0 z-50 lg:hidden" data-controller="navigation">
+  <%# Navigation %>
+  <div class="hidden pointer-events-auto" data-navigation-target="nav">
+    <div class="rounded block bg-white p-4 mb-4 shadow">
+      <ul class="grid grid-cols-1 gap-4">
+        <% main_links.map do |link| %>
+          <li class="relative">
+            <%= active_link_to link[:path], active: link[:active], class: 'flex items-center justify-center text-center rounded transition' do %>
+              <span class="shrink-0 w-[34px] h-[34px] flex items-center justify-center rounded border bordre-gray-100 text-base">
+                <%= icon(Rails.application.config.fa_style, link[:icon]) %>
+              </span>
+              <div class="grow w-full text-left ml-4">
+                <%= link[:label] %>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <%# End of Navigation %>
+
+  <div class="rounded bg-white p-4 flex justify-between shadow pointer-events-auto">
+    <%# Profile %>
+    <div class="shrink-0 grow-0 mr-4">
+      <%= active_link_to suggestions_path,
+        data: { turbo_frame: :modal },
+        class: 'text-sm text-gray-500 leading-normal font-normal block' do
+      %>
+        <%= icon(Rails.application.config.fa_style, 'megaphone') %>
+      <% end %>
+    </div>
+    <%# End of Profile %>
+
+    <%# Toggle %>
+    <div class="shrink-0 grow-0 ml-4">
+      <%= button_tag data: { action: 'click->navigation#toggle' }, class: 'block' do %>
+        <%= icon(Rails.application.config.fa_style, 'bars') %>
+      <% end %>
+    </div>
+    <%# End of Toggle %>
+  </div>
+</div>

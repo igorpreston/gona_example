@@ -1,0 +1,22 @@
+<% if menu_categories&.size&.positive? %>
+  <div class="grid grid-cols-1 gap-6">
+    <%= render partial: 'menus/menu_category', collection: menu_categories.order(position: :asc), locals: { menu: } %>
+  </div>
+<% else %>
+  <div class="card">
+    <div class="card-container">
+      <%= render partial: 'components/empty_state', locals: {
+        icon: 'inbox',
+        title: 'No categories',
+        description: 'You have not created any categories yet.',
+        buttons: [
+          link_to(
+            'Add first category',
+            menu_categories_path(menu),
+            class: 'btn btn-primary', data: { turbo_frame: :modal }
+          )
+        ]
+      } %>
+    </div>
+  </div>
+<% end %>

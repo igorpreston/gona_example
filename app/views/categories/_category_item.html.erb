@@ -1,0 +1,53 @@
+<%= turbo_frame_tag category_item.prefix_id do %>
+  <% item = category_item.item %>
+
+  <div class="block">
+    <div class="flex items-center">
+      <%# Drag and Drop %>
+      <span class="w-8 h-8 flex items-center justify-center rounded shrink-0 cursor-grab mr-2 hover:bg-gray-50 transition text-gray-500" id="tickleMe">
+        <%= icon(Rails.application.config.fa_style, 'grip-dots-vertical') %>
+      </span>
+      <%# End of Drag and Drop %>
+      <div class="flex-grow items-center flex -m-2 p-2 rounded hover:bg-gray-50">
+        <div class="overflow-hidden rounded relative bg-gray-100 text-gray-500 text-2xl shrink-0 mr-4 h-14 w-14">
+          <%= render partial: 'items/photo', locals: { item: } %>
+        </div>
+        <div class="flex-grow flex items-center justify-between">
+          <div class="block">
+            <p class="text-base text-gray-900 leading-normal font-normal">
+              <%= item.name %>
+            </p>
+          </div>
+          <%# Actions %>
+          <div class="shrink-0 ml-4 flex items-center relative" data-controller="dropdown">
+            <%= button_tag class: 'flex items-center',
+              data: { action: 'dropdown#toggle click@window->dropdown#hide' } do
+            %>
+              <%= icon(Rails.application.config.fa_style, 'ellipsis') %>
+            <% end %>
+
+            <div
+              data-dropdown-target="menu"
+              class="hidden transition transform absolute z-10 right-0"
+              data-transition-enter-from="opacity-0"
+              data-transition-enter-to="opacity-100"
+              data-transition-leave-from="opacity-100"
+              data-transition-leave-to="opacity-0"
+            >
+              <div class="absolute top-4 right-0 w-full min-w-[140px] max-h-96 overflow-y-auto origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1" role="none">
+                  <ul class="grid grid-cols-1">
+                    <li class="p-1">
+                      <%= button_to 'Delete', category_category_item_path(category, category_item), method: :delete, class: 'text-gray-900 text-right block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' %>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%# End of Actions %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

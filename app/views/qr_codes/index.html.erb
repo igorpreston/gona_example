@@ -1,0 +1,38 @@
+<% content_for :title, 'QR Codes'.html_safe %>
+<% content_for :heading, 'QR Codes'.html_safe %>
+
+<%= render partial: 'organizations/header', locals: { back_url: edit_organization_path } %>
+
+<div class="block mt-8">
+  <div class="content">
+    <div class="card">
+      <div class="card-header">
+        <div class="flex-grow">
+          <p class="text-base text-gray-900 leading-normal font-medium">
+            QR codes
+          </p>
+          <p class="text-sm text-gray-500 leading-normal font-normal">
+            QR codes are used to identify your menus. You can print them and place them at the entrance of your restaurant or on the tables.
+          </p>
+        </div>
+        <div class="ml-4">
+          <%= link_to new_organization_qr_code_path, data: { turbo_frame: :modal }, class: 'btn btn-primary' do %>
+            <%= icon(Rails.application.config.fa_style, 'plus') %>
+            New QR code
+          <% end %>
+        </div>
+      </div>
+      <div class="card-container mt-4 md:mt-6">
+        <%= turbo_frame_tag :qr_codes, class: "grid grid-cols-1" do %>
+          <%= render partial: 'organizations/qr_codes/qr_code', collection: @qr_codes %>
+        <% end%>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-6">
+  <div class="content">
+    <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<%= turbo_stream.remove(merchant.prefix_id) %>
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'Organization member removed' } }
+) %>

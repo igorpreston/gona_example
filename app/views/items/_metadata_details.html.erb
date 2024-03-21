@@ -1,0 +1,35 @@
+<div class="flex items-center flex-wrap -m-2">
+  <% if item.metadata.vegan? %>
+    <span class="flex items-center px-2 p-1 text-sm text-gray-900 leading-normal font-normal bg-gray-50 rounded m-2">
+      <%= icon(
+        Rails.application.config.fa_style, Item::Metadata::ICONS[:vegan], class: 'text-green-600 mr-2'
+      ) %>
+      Vegan
+    </span>
+  <% end %>
+  <% if item.metadata.vegetarian? %>
+    <span class="flex items-center px-2 p-1 text-sm text-gray-900 leading-normal font-normal bg-gray-50 rounded m-2">
+      <%= icon(
+        Rails.application.config.fa_style, Item::Metadata::ICONS[:vegetarian], class: 'text-pink-600 mr-2'
+      ) %>
+      Vegetarian
+    </span>
+  <% end %>
+  <% if item.metadata.gluten_free? %>
+    <span class="flex items-center px-2 p-1 text-sm text-gray-900 leading-normal font-normal bg-gray-50 rounded m-2">
+      <%= icon(
+        Rails.application.config.fa_style, Item::Metadata::ICONS[:gluten_free], class: 'text-yellow-600 mr-2'
+      ) %>
+      Gluten free
+    </span>
+  <% end %>
+  <% if item.metadata.spicy? %>
+    <span class="flex items-center px-2 p-1 text-sm text-gray-900 leading-normal font-normal bg-gray-50 rounded m-2">
+      <%= icon(
+        Rails.application.config.fa_style, Item::Metadata::ICONS[:spicy], class: 'text-red-600 mr-2'
+      ) %>
+      Spicy
+    </span>
+  <% end %>
+
+</div>

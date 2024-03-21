@@ -1,0 +1,46 @@
+<% content_for :title, category.name %>
+<% content_for :heading, category.name %>
+<% buttons = [
+  link_to(category_items_path(category), class: 'btn btn-primary', data: { turbo_frame: :modal }) do
+    icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') + 'Add item'
+  end,
+  link_to(edit_category_path(category), class: 'btn btn-secondary', data: { turbo_frame: :modal }) do
+    icon(Rails.application.config.fa_style, 'pen', class: 'mr-2') + 'Edit'
+  end
+] %>
+
+<%= render layout: 'layouts/menu' do %>
+  <%= render partial: 'menus/header', locals: { back_url: categories_path, buttons: } %>
+
+  <div class="block">
+    <div class="content">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <div class="lg:col-span-8">
+          <%= turbo_frame_tag :category_items do %>
+            <%= render partial: 'categories/category_items', locals: { category:, category_items: } %>
+          <% end %>
+        </div>
+
+        <div class="lg:col-span-4">
+          <%# Locations %>
+          <div class="card">
+            <div class="card-header">
+              <div class="flex-grow">
+                <p class="text-base text-gray-900 leading-normal font-medium">
+                  Used by <%= pluralize(category.menus_count, 'menu') %>
+                </p>
+              </div>
+            </div>
+            <div class="card-body">
+              <%= turbo_frame_tag :category_menus, src: category_menus_path(category), lazy: true do %>
+                <%= render partial: 'components/loading' %>
+              <% end %>
+            </div>
+          </div>
+          <%# End of Locations %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

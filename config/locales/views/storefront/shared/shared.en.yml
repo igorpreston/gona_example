@@ -1,0 +1,7 @@
+en:
+  shared:
+    active_orders:
+      details:
+        submitted: Pending • from @%{nickname}
+        in_progress: In progress • from @%{nickname}
+        ready: Ready • from @%{nickname}

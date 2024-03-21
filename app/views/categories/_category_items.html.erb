@@ -1,0 +1,18 @@
+<div class="card">
+  <div class="card-body">
+    <% if category.category_items.size.positive? %>
+      <div class="grid grid-cols-1 gap-4">
+        <%= render partial: 'categories/category_item', collection: category_items, locals: { category: } %>
+      </div>
+    <% else %>
+      <%= render partial: 'components/empty_state', locals: {
+        icon: 'inbox',
+        title: 'No items yet',
+        description: 'You can pre-define items to be used in your menus. Note that you can also add or remove items directly to your menus.',
+        buttons: [
+          link_to('Add first item', category_items_path(category), class: 'btn btn-primary', data: { turbo_frame: :modal })
+        ]
+      } %>
+    <% end %>
+  </div>
+</div>

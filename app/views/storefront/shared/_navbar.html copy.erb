@@ -1,0 +1,42 @@
+<header class="bg-white block relative z-10 shrink-0 grow-0">
+  <div class="content">
+    <div class="w-full flex justify-between py-3">
+      <%# Logo %>
+      <div class="shrink-0">
+        <span class="inline">
+          <%= render partial: 'components/logo', locals: {
+            classes: "h-[28px] w-[28px] p-0.5 rounded-full bg-blue-500 fill-white hover:bg-blue-600 transition"
+          } %>
+        </span>
+      </div>
+      <%# End of Logo %>
+      <%# Account %>
+      <div class="shrink-0 ml-6">
+        <ul class="flex items-center -m-2">
+          <li class="p-2">
+            <% if user_signed_in? %>
+              <%= button_to destroy_user_session_path, method: :delete, class: 'text-sm text-gray-500 hover:text-gray-900 leading-normal font-normal ring-1 ring-gray-100 hover:ring-gray-200 hover:bg-gray-100 transition rounded-full px-4 py-2' do %>
+                Account
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'arrow-right-to-arc',
+                  class: 'ml-1.5'
+                ) %>
+              <% end %>
+            <% else %>
+              <%= link_to new_user_session_path, class: 'text-sm text-gray-500 hover:text-gray-900 leading-normal font-normal ring-1 ring-gray-100 hover:ring-gray-200 hover:bg-gray-100 transition rounded-full px-4 py-2' do %>
+                Account
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'arrow-right-to-arc',
+                  class: 'ml-1.5'
+                ) %>
+              <% end %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+      <%# End of Account %>
+    </div>
+  </div>
+</header>

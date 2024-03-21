@@ -1,0 +1,13 @@
+<span class="avatar bg-gray-100 text-gray-500">
+  <% if user&.avatar&.attached? %>
+    <%= cl_image_tag(
+      user.avatar.key,
+      class: 'w-full h-full object-cover'
+    ) %>
+  <% else %>
+    <%= icon(
+      Rails.application.config.fa_style,
+      'user'
+    ) %>
+  <% end %>
+</span>

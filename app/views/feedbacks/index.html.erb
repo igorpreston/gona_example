@@ -1,0 +1,102 @@
+<% content_for :title, 'Feedback' %>
+<% heading = 'Feedback' %>
+<% subheading = pluralize(current_tenant.feedbacks_count, 'feedback') %>
+
+<div class="block m-intro">
+  <div class="content">
+
+    <div class="flex">
+      <%# Heading %>
+      <div class="w-full flex-grow">
+        <h1 class="text-2xl font-semibold leading-normal text-gray-900">
+          Feedbacks:
+
+          <span
+            class="relative"
+            data-controller="dropdown"
+          >
+            <%= button_tag data: { action: 'dropdown#toggle click@window->dropdown#hide' },
+              class: 'font-medium text-blue-600' do %>
+              <%= params[:location_name] || 'All locations' %>
+              <%= icon(Rails.application.config.fa_style, 'angle-down', class: 'text-base leading-normal') %>
+            <% end %>
+
+            <div
+              data-dropdown-target="menu"
+              class="hidden transition transform absolute right-auto z-10"
+              data-transition-enter-from="opacity-0"
+              data-transition-enter-to="opacity-100"
+              data-transition-leave-from="opacity-100"
+              data-transition-leave-to="opacity-0"
+            >
+              <div class="absolute top-2 w-full min-w-[240px] max-h-96 overflow-y-auto origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <%= turbo_frame_tag :feedbacks_locations, src: feedback_locations_path, lazy: true  do %>
+                  Loading...
+                <% end %>
+              </div>
+            </div>
+          </span>
+        </h1>
+      </div>
+      <%# End of Heading %>
+    </div>
+  </div>
+</div>
+
+<div class="block mt-8">
+  <div class="content">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+      <%# Customer feedbacks %>
+      <div class="card">
+        <div class="card-header">
+          <p class="text-sm text-gray-500 leading-normal font-normal">
+            Customer feedbacks
+          </p>
+        </div>
+        <div class="card-body">
+          <p class="text-xl font-semibold text-gray-900 leading-normal">
+            <%= turbo_frame_tag :feedbacks_total,
+              src: feedback_count_total_path(location_id: params[:location_id] || nil), lazy: true do
+            %>
+              <%= icon(
+                "#{Rails.application.config.fa_style} fa-solid fa-spin", 'spinner-third', class: 'text-gray-500'
+              ) %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+      <%# End of Customer feedbacks %>
+      <%# Awaiting reply %>
+      <div class="card">
+        <div class="card-header">
+          <p class="text-sm text-gray-500 leading-normal font-normal">
+            Awaiting reply
+          </p>
+        </div>
+        <div class="card-body">
+          <p class="text-xl font-semibold text-gray-900 leading-normal">
+            <%= turbo_frame_tag :feedbacks_replies,
+              src: feedback_count_replies_path(location_id: params[:location_id] || nil), lazy: true do
+            %>
+              <%= icon(
+                "#{Rails.application.config.fa_style} fa-solid fa-spin", 'spinner-third', class: 'text-gray-500'
+              ) %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+      <%# End of Awaiting reply %>
+    </div>
+  </div>
+</div>
+
+
+<div class="block mt-12">
+  <div class="content">
+    <%= render partial: 'feedbacks/feedbacks', locals: { feedbacks: @feedbacks } %>
+
+    <div class="mt-8">
+      <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<%= turbo_frame_tag menu_category_item.prefix_id, data: {
+  sortable_update_url: menu_menu_category_menu_category_item_position_path(menu, menu_category, menu_category_item)
+} do %>
+  <% item = menu_category_item.item %>
+
+  <div class="flex items-center w-full">
+    <%# Drag and Drop %>
+    <span class="w-8 h-8 flex items-center justify-center rounded shrink-0 cursor-grab mr-2 hover:bg-gray-50 transition text-gray-500" id="tickleMe">
+      <%= icon(Rails.application.config.fa_style, 'grip-dots-vertical') %>
+    </span>
+    <%# End of Drag and Drop %>
+
+    <div class="flex-grow">
+      <%= link_to edit_menu_menu_category_menu_category_item_path(menu, menu_category, menu_category_item), data: {
+        turbo_frame: :modal
+      }, class: 'block rounded hover:bg-gray-50 transition -m-2' do %>
+        <div class="flex items-center p-2">
+          <%# Product Photo %>
+          <span class="relative h-14 w-14 rounded bg-gray-100 text-xl text-gray-500 shrink-0 mr-4 overflow-hidden">
+            <%= render partial: 'items/photo', locals: { item: } %>
+          </span>
+          <%# End of Product Photo %>
+          <%# Name and modifiers %>
+          <div class="flex-grow">
+            <p class="text-base text-gray-900 leading-normal font-medium">
+              <%= item.name %>
+
+              <%= render partial: 'items/metadata_icons', locals: { item: } %>
+            </p>
+            <% if item.modifiers&.size&.positive? %>
+              <p class="text-sm text-gray-500 leading-normal">
+                <%= item.modifiers.map(&:name).join(', ') %>
+              </p>
+            <% end %>
+          </div>
+          <%# End of Name and modifiers %>
+          <%# Actions %>
+          <div class="text-sm text-gray-900 leading-normal font-medium -m-2 shrink-0">
+            <span class="rounded py-2 px-3 m-2">
+              <%= item.price&.format %>
+              <span class="text-gray-500 font-normal">
+                <%= item.currency&.upcase %>
+              </span>
+            </span>
+
+            <%# Sold out %>
+            <% if item.sold_out? %>
+              <span
+                class="bg-gray-50 rounded py-2 px-3 m-2"
+                data-controller="popper"
+                data-popper-target="element"
+                data-action="mouseenter->popper#show mouseleave->popper#hide"
+              >
+                <%= icon(Rails.application.config.fa_style, 'eye-slash', class: 'text-red-600') %>
+
+                <div class="hidden rounded relative overflow-hidden" role="tooltip" data-popper-target="tooltip">
+                  <span class="block text-white py-1 px-2 text-xs font-normal leading-normal bg-black/95">
+                    Marked as sold out
+                  </span>
+                </div>
+              </span>
+            <% end %>
+            <%# End of Sold out %>
+          </div>
+          <%# End of Actions %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

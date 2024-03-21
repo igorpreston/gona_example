@@ -1,0 +1,33 @@
+<%= form_with model: menu_category, url: do |f| %>
+  <%= f.fields_for :category do |ff| %>
+    <div class="grid grid-cols-1 gap-6">
+      <div class="col">
+        <div class="mb-2">
+          <%= ff.label :name, 'Name', class: 'label' %>
+        </div>
+        <div class="block">
+          <%= ff.text_field :name, value: ff.object&.name, class: 'input' %>
+        </div>
+      </div>
+      <div class="col flex justify-end -m-2">
+        <% unless f.object.new_record? %>
+          <span class="p-2">
+            <label for="delete" class="btn btn-danger">Delete</label>
+          </span>
+        <% end %>
+        <span class="p-2">
+          <%= submit_tag "Save",
+            { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+          %>
+        </span>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+<%= button_to '',
+  menu_menu_category_path(menu, menu_category),
+  method: :delete,
+  id: 'delete',
+  data: { turbo: false },
+  class: 'hidden' unless menu_category.new_record?
+%>

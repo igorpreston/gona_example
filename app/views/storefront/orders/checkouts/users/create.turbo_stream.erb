@@ -1,0 +1,5 @@
+<%= turbo_stream.update(
+  :order_processor_body,
+  partial: 'storefront/orders/checkouts/processors/body',
+  locals: { order: }
+) %>

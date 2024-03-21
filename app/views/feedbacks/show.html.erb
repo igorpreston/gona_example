@@ -1,0 +1,63 @@
+<% content_for :title, "Customer's Feedback" %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <%# Profile %>
+  <div class="block">
+    <div class="flex items-center">
+      <span class="h-12 w-12 rounded-full overflow-hidden relative block text-lg mr-2">
+        <%= render partial: 'users/avatar', locals: { user: feedback.user  } %>
+      </span>
+      <p class="text-base text-gray-900 leading-normal font-medium">
+        <%= feedback.user_id? ? feedback.user.name : 'Guest' %>
+      </p>
+    </div>
+  </div>
+  <%# End of Profile %>
+  <%# Feedback %>
+  <div class="mt-4">
+    <div class="block">
+      <p class="text-sm text-gray-900 leading-normal font-normal">
+        <%= feedback.content %>
+      </p>
+      <p class="text-xs text-gray-500 leading-normal font-normal mt-2">
+        Reviewed: <%= feedback.created_at.to_fs(:long) %>
+      </p>
+    </div>
+  </div>
+  <%# End of Feedback %>
+
+  <%# Response %>
+  <div class="mt-6 border-t border-gray-200 pt-6">
+    <% unless feedback.response.present? %>
+      <%= form_with(model: feedback, url: feedback_path(feedback), method: :patch, class: 'block', data: { turbo: false }) do |f| %>
+        <div class="grid grid-cols-1 gap-6">
+          <div class="col">
+            <%= f.text_area :response, class: 'input', autofocus: false, data: { controller: 'textarea-autogrow', character_counter_target: 'input' } %>
+          </div>
+          <div class="col">
+            <%= submit_tag "Respond", class: 'btn-primary btn-md w-full', data: { turbo_submits_with: "Sending...".html_safe } %>
+          </div>
+          <% if feedback.notify? %>
+          <div class="col">
+            <p class="text-center text-sm text-gray-900 leading-normal font-normal">
+              Your customer will receive a response by SMS.
+            </p>
+          </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-sm text-gray-900 leading-normal font-medium mb-3">
+        Your response:
+      </p>
+      <p class="text-sm text-gray-900 leading-normal font-normal">
+        <%= feedback.response %>
+      </p>
+    <% end %>
+  </div>
+  <%# End of Response %>
+<% end %>

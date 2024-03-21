@@ -1,0 +1,9 @@
+en:
+  loading:
+    title: Loading...
+  navbar:
+    suggestion:
+      popper: Feedback
+  pagination:
+    previous: Previous
+    next: Next

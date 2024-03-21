@@ -1,0 +1,43 @@
+<% content_for :heading, "Let's get started" %>
+<% content_for :subheading, "We just need a few details to get you started." %>
+
+
+<%= form_with model: organization, url: organization_path do |f| %>
+  <div class="grid grid-cols-1 gap-8">
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :name, 'Your brand name', class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_field :name, class: 'input-auth', placeholder: 'ex. Golden Ramen', autofocus: true, required: true %>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :email, 'Business email', class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.email_field :email, class: 'input-auth', placeholder: 'ex. hq@brand.com', required: true %>
+      </div>
+    </div>
+
+    <div class="col">
+      <%= button_tag class: 'btn btn-lg btn-primary w-full', data: { turbo_submits_with: "🤩 Creating...".html_safe, turbo: false } do %>
+        Continue
+        <span class="ml-2">
+          <%= icon(Rails.application.config.fa_style, 'arrow-right') %>
+        </span>
+      <% end %>
+    </div>
+
+    <div class="col">
+      <p class="text-sm text-gray-500 leading-normal font-normal">
+        By proceeding, you agree to the
+        <%= link_to 'Terms and Conditions', ENV.fetch('GONA_TERMS', '#'), class: 'text-blue-600 hover:text-blue-500 transition', target: :_blank %>
+        and
+        <%= link_to 'Privacy Policy', ENV.fetch('GONA_PRIVACY', '#'), class: 'text-blue-600 hover:text-blue-500 transition', target: :_blank %>.
+      </p>
+    </div>
+  </div>
+<% end %>

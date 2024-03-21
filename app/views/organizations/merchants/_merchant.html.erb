@@ -1,0 +1,51 @@
+<%= turbo_frame_tag merchant.prefix_id do %>
+  <div class="relative">
+    <div class="block">
+      <div class="flex items-center justify-between p-4">
+        <span
+          class="shrink-0 mr-6 flex items-center justify-center h-12 w-12 rounded-full text-gray-500 text-lg overflow-hidden"
+        >
+          <%= render partial: 'merchants/avatar', locals: { merchant: } %>
+        </span>
+        <div class="w-full flex-grow">
+          <p class="text-sm text-gray-900 leading-normal font-medium"><%= merchant.name %></p>
+          <p class="text-xs text-gray-500 leading-normal font-normal">
+            <% if merchant.invitation_sent? %>
+                Invitation sent
+            <% else %>
+              Last login was
+              <%= merchant.last_sign_in_at.localtime.to_fs(:long) %>
+            <% end %>
+          </p>
+        </div>
+        <% unless (current_merchant.id == merchant.id || current_tenant.owner_id != current_merchant.id) %>
+          <div class="shrink-0 ml-4" data-controller="dropdown">
+            <%= button_tag type: 'button', data: { action: 'dropdown#toggle click@window->dropdown#hide' }, class: 'flex items-center justify-center rounded overflow-hidden text-sm' do %>
+              <span class="relative text-sm font-normal text-gray-500 overflow-hidden">
+                Edit
+              </span>
+            <% end %>
+            <div
+              data-dropdown-target="menu"
+              class="hidden transition transform origin-top-right mt-2 absolute right-0 z-10"
+              data-transition-enter-from="opacity-0 scale-95"
+              data-transition-enter-to="opacity-100 scale-100"
+              data-transition-leave-from="opacity-100 scale-100"
+              data-transition-leave-to="opacity-0 scale-95"
+            >
+              <div class="absolute right-0 top-0 w-56 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <div class="py-1" role="none">
+                  <ul class="grid grid-cols-1">
+                    <li class="p-1">
+                      <%= button_to 'Delete', organization_merchant_path(merchant), method: :delete, class: 'text-gray-900 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' %>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,65 @@
+<% content_for :title, 'Search items' %>
+<% content_for :heading, 'Search items' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= form_with(
+      url: menu_menu_category_items_path(menu_category.menu, menu_category),
+      method: :get,
+      data: { turbo_frame: :search_menu_category_items }
+    ) do |f| %>
+      <div class="flex items-center justify-between">
+        <div class="flex-grow">
+          <%= f.text_field :query, class: 'input', placeholder: 'Search', autocomplete: 'off', autofocus: true %>
+        </div>
+        <div class="shrink-0 ml-2">
+          <%= button_tag type: :submit, data: { disable_with: 'Searching..' }, class: "btn btn-primary h-full" do %>
+            <%= icon(Rails.application.config.fa_style, 'search') %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="block mt-4">
+    <%= turbo_frame_tag :search_menu_category_items do %>
+      <div class="grid grid-cols-1 gap-4">
+        <% if @items.present? %>
+          <%= render partial: 'menus/menu_categories/items/item', collection: @items, locals: { menu_category: } %>
+        <% else %>
+          <%= render partial: 'components/empty_state', locals: {
+            icon: 'search',
+            title: 'No items found',
+            description: 'Try searching for something else'
+          } %>
+        <% end %>
+
+        <%# Create button %>
+        <div class="relative">
+          <div class="col -m-2">
+            <%# Category %>
+            <%= link_to new_menu_menu_category_menu_category_item_path(menu_category.menu, menu_category), class: 'block w-full bg-gray-50 hover:bg-gray-100 rounded transition p-4', data: { turbo_frame: :modal } do %>
+              <div class="flex items-center">
+                <div class="flex-grow w-full text-left">
+                  <p class="text-base text-gray-900 leading-normal font-normal text-center">
+                    <%= icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') %>
+                    Create new item
+                  </p>
+                </div>
+              </div>
+            <% end %>
+            <%# End of Category %>
+          </div>
+        </div>
+        <%# End of Create button %>
+      </div>
+      <div class="mt-6">
+        <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

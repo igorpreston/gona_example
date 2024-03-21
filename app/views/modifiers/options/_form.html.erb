@@ -1,0 +1,27 @@
+<%= form_with model: option, url: option.new_record? ? modifier_options_path(option.modifier) : modifier_option_path(modifier, option), data: { turbo: false } do |f| %>
+  <%= f.fields_for :item do |ff| %>
+    <div class="grid grid-cols-1 gap-6">
+      <div class="col">
+        <div class="mb-2">
+          <%= ff.label :name, 'Name', class: 'label' %>
+        </div>
+        <div class="block">
+          <%= ff.text_field :name, class: 'input', value: option.item&.name, class: 'input' %>
+        </div>
+      </div>
+      <div class="col">
+        <div class="mb-2">
+          <%= ff.label :price, 'Price', class: 'label' %>
+        </div>
+        <div class="block">
+          <%= ff.text_field :price, class: 'input', value: option.item&.price, class: 'input' %>
+        </div>
+      </div>
+      <div class="col">
+        <%= submit_tag "Save option",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Updating...".html_safe } }
+        %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,36 @@
+<% content_for :title, 'Send feedback' %>
+<% content_for :heading, 'Send feedback' %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= turbo_frame_tag :suggestion_body do %>
+      <div class="mb-4">
+        <p class="text-sm text-gray-500 leading-normal font-normal">
+          How can we improve GONA Business? How would you improve this page? What would you add or change?
+        </p>
+      </div>
+      <%= form_with url: suggestions_path, method: :post do |f| %>
+        <div class="grid grid-cols-1 gap-6">
+          <div class="col">
+            <%= f.text_area :description, class: 'input min-h-[140px]', placeholder: 'Help us improve this page.', autofocus: false, data: { controller: 'textarea-autogrow' }, autofocus: true %>
+          </div>
+          <div class="col text-right">
+            <%= submit_tag "Send",
+              { class: 'btn btn-primary', data: { turbo_submits_with: "Sending...".html_safe } }
+            %>
+          </div>
+          <div class="col text-right">
+            <p class="text-xs text-gray-500 leading-normal font-normal">
+              Have a specific issue?
+              <%= mail_to ENV.fetch('GONA_CONTACT_EMAIL', nil), 'Contact support', class: 'text-blue-600 hover:text-blue-500 transition', subject: 'Feature request' %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

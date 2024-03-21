@@ -1,0 +1,58 @@
+class Merchant::InvitationInstructionsNotification < Noticed::Base
+  include Rails.application.routes.url_helpers
+
+  deliver_by :sendgrid, class: DeliveryMethods::Sendgrid.name, request_body: :request_body, if: :production?
+
+  SENDGRID_TEMPLATE_ID = 'd-dfa98c32a7e14165bad8e8416913d49e'.freeze
+
+  params :record, :token, :opts
+
+  def record
+    params[:record]
+  end
+
+  def token
+    params[:token]
+  end
+
+  def production?
+    Rails.env.production?
+  end
+
+  def request_body
+    {
+      personalizations: [
+        {
+          to: [
+            {
+              email: record.email
+            }
+          ],
+          dynamic_template_data: {
+            first_name: record.first_name,
+            last_name: record.last_name,
+            invited_by_first_name: record.invited_by&.first_name,
+            invited_by_last_name: record.invited_by&.last_name,
+            invited_by_email: record.invited_by&.email,
+            organization_name: record.organization&.name,
+            gona_contact_email: ENV.fetch('GONA_UNSTYLED_CONTACT_EMAIL', nil),
+            gona_footer: ENV.fetch('GONA_FOOTER', nil),
+            gona_privacy_url: ENV.fetch('GONA_PRIVACY', nil),
+            accept_invitation_url: url_for(
+              controller: 'merchants/invitations',
+              action: 'edit',
+              invitation_token: token,
+              host: ENV.fetch('HOST', nil),
+              protocol: ENV.fetch('PROTOCOL', nil),
+              subdomain: :business
+            )
+          }
+        }
+      ],
+      from: {
+        email: ENV.fetch('GONA_NOREPLY_EMAIL', nil)
+      },
+      template_id: SENDGRID_TEMPLATE_ID
+    }
+  end
+end

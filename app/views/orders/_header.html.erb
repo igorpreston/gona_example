@@ -1,0 +1,122 @@
+<% buttons = case order.status
+  when 'draft'
+    [
+      {
+        label: 'Submit',
+        url: order_status_path(order),
+        params: { order: { status: :submitted } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  when 'submitted'
+    [
+      {
+        label: 'Edit',
+        url: '/edit_order_path(order)',
+        params: { order: order.id },
+        icon: 'pencil',
+        type: 'secondary',
+        method: :get
+      },
+      {
+        label: 'Cancel',
+        url: order_status_path(order),
+        params: { order: { status: :cancelled } },
+        icon: 'xmark',
+        type: 'secondary',
+        method: :patch
+      },
+      {
+        label: 'Accept',
+        url: order_status_path(order),
+        params: { order: { status: :in_progress } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  when 'in_progress'
+    [
+      {
+        label: 'Edit',
+        url: edit_order_path(order),
+        icon: 'pencil',
+        type: 'secondary',
+        method: :get
+      },
+      {
+        label: 'Cancel',
+        url: order_status_path(order),
+        params: { order: { status: :cancelled } },
+        icon: 'xmark',
+        type: 'secondary',
+        method: :patch
+      },
+      {
+        label: 'Ready',
+        url: order_status_path(order),
+        params: { order: { status: :ready } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  when 'ready'
+    [
+      {
+        label: 'Complete',
+        url: order_status_path(order),
+        params: { order: { status: :completed } },
+        icon: 'check',
+        type: 'primary',
+        method: :patch
+      }
+    ]
+  else
+    []
+  end
+%>
+
+<%# Header %>
+<div class="block m-intro">
+  <div class="content">
+    <div class="flex items-start justify-between">
+      <%# Heading %>
+      <div class="w-full flex-grow flex items-center">
+        <%# Back button %>
+        <div class="mr-4 shrink-0">
+          <%= link_to orders_path, class: 'btn' do %>
+            <%= icon(Rails.application.config.fa_style, "arrow-left") %>
+          <% end %>
+        </div>
+        <%# End of Back button %>
+
+        <%# Title %>
+        <div class="flex items-center flex-wrap">
+          <h1 class="text-2xl font-semibold leading-normal text-gray-900">
+            <span class="text-gray-500 inline-block">#</span><%= order.number %>
+          </h1>
+          <span class="ml-2">
+            <%= render partial: "orders/statuses/#{order.status.downcase.underscore}", locals: { order: } %>
+          </span>
+        </div>
+        <%# End of Title %>
+      </div>
+      <%# End of Heading %>
+      <%# Header actions %>
+      <div class="shrink-0">
+        <div class="flex items-center flex-wrap -m-2">
+          <% buttons.map do |button| %>
+            <span class="shrink-0 p-2">
+              <%= button_to button[:label], button[:url], method: button[:method], params: button[:params], class: "btn btn-#{button[:type]}" %>
+            </span>
+          <% end %>
+        </div>
+      </div>
+      <%# End of Header actions %>
+    </div>
+  </div>
+</div>
+<%# End of Header %>

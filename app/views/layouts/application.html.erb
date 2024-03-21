@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang=<%= I18n.locale.to_s %> class="h-full">
+  <head>
+    <%= render partial: 'shared/head' %>
+    <%= hotwire_livereload_tags if Rails.env.development? %>
+  </head>
+  <body class="min-h-screen justify-between h-full flex flex-col overflow-auto">
+    <%# Navigation bar – Mobile %>
+    <%= render partial: 'components/mobile_navbar', locals: {organization: current_tenant } %>
+    <%# Body layout %>
+    <div class="bg-gray-50 relative flex flex-row flex-grow overflow-hidden">
+      <%# Sidebar %>
+      <%= render partial: 'components/sidebar', locals: { organization: current_tenant } %>
+      <%# Main content %>
+      <main class="w-full mx-auto overflow-y-scroll pb-[30vh]">
+        <%# Navigation bar – Desktop %>
+        <%= render partial: 'components/navbar', locals: { organization: current_tenant } %>
+
+        <%= yield %>
+      </main>
+    </div>
+    <%# End of Body layout %>
+    <%# Modal %>
+    <%= turbo_frame_tag :modal, lazy: true %>
+    <%# Notifications %>
+    <div class="z-20 flex self-center m-4 pointer-events-none fixed bottom-0 max-w-[250px] w-full">
+      <%= turbo_frame_tag :flash, class: 'grid grid-cols-1 gap-4 w-full' do %>
+        <%= render partial: 'components/flash', locals: { flash: flash } if flash.any? %>
+      <% end %>
+    </div>
+  </body>
+</html>

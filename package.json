@@ -1,0 +1,49 @@
+{
+  "name": "gona",
+  "scripts": {
+    "build": "yarn vite build"
+  },
+  "private": true,
+  "dependencies": {
+    "@headlessui/react": "^1.7.11",
+    "@heroicons/react": "^2.0.16",
+    "@hotwired/stimulus": "^3.2.1",
+    "@hotwired/turbo-rails": "^7.2.5",
+    "@popperjs/core": "^2.11.7",
+    "@rails/request.js": "^0.0.8",
+    "chart.js": "^4.3.0",
+    "chartkick": "^5.0.1",
+    "classnames": "^2.3.2",
+    "mapkick": "^0.2.6",
+    "react": "^18.2.0",
+    "react-aria": "^3.24.0",
+    "react-dom": "^18.2.0",
+    "react-use": "^17.4.0",
+    "sortablejs": "^1.15.0",
+    "stimulus-character-counter": "^4.2.0",
+    "stimulus-clipboard": "^4.0.1",
+    "stimulus-dropdown": "^2.1.0",
+    "stimulus-notification": "^2.2.0",
+    "stimulus-places-autocomplete": "^0.5.0",
+    "stimulus-rails-nested-form": "^4.1.0",
+    "stimulus-scroll-to": "^4.1.0",
+    "stimulus-sortable": "^4.1.1",
+    "stimulus-textarea-autogrow": "^4.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.0",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.9",
+    "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "stimulus-vite-helpers": "^3.0.1",
+    "tailwindcss": "^3.3.1",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.4",
+    "vite": "^5.0.4",
+    "vite-plugin-rails": "^0.1.0",
+    "vite-plugin-ruby": "^5.0.0"
+  }
+}

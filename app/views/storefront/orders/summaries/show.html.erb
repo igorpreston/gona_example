@@ -1,0 +1,68 @@
+<% content_for :title, 'Thank you!' %>
+
+<div class="block">
+  <div class="content-sm">
+    <div class="card overflow-hidden">
+      <div class="card-body">
+        <div class="block">
+          <h1 class="text-green-600 text-2xl font-normal leading-normal">
+            You paid $20
+          </h1>
+        </div>
+        <div class="mt-1">
+          <p class="text-base text-gray-900 leading-normal font-normal">
+            The server knows the bill is paid. Feel free to head out and don't hesitate to say bye!
+          </p>
+        </div>
+      </div>
+      <div class="card-container">
+        <%= link_to '#', class: 'card-body block bg-gray-50 transition hover:bg-gray-100' do %>
+          <div class="flex justify-between items-center">
+            <div class="grow shrink w-full">
+              <p class="text-sm text-gray-900 leading-normal font-normal">
+                Get my receipt
+              </p>
+              <p class="text-xs text-gray-500 leading-normal font-normal mt-0.5">
+                <%= icon(
+                  Rails.application.config.fa_style,
+                  'circle-info',
+                  class: 'mr-1'
+                ) %>
+                your receipt has been saved in your GONA account
+              </p>
+            </div>
+            <span class="inline shrink-0 ml-4">
+              <%= icon(
+                Rails.application.config.fa_style,
+                'chevron-right',
+                class: 'text-gray-900 text-lg leading-normal font-normal'
+              ) %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= turbo_frame_tag :order_feedback_request do %>
+  <div class="block mt-12">
+    <div class="content-sm">
+      <div class="block text-center mb-2">
+        <p class="text-sm text-green-600 leading-normal font-medium">
+          Rate your experience at <%= order.organization&.name %>
+        </p>
+      </div>
+      <div class="block">
+        <%= link_to order_feedback_path(order), data: { turbo_frame: :modal }, class: 'btn btn-lg btn-green w-full' do %>
+          <%= icon(
+            Rails.application.config.fa_style,
+            'stars',
+            class: 'mr-1'
+          ) %>
+          Leave a review
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

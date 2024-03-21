@@ -1,0 +1,44 @@
+<%= turbo_frame_tag "#{menu_category_item.prefix_id}" do %>
+  <% item = menu_category_item.item %>
+
+  <div class="-m-3 pt-3">
+    <%= link_to new_order_order_item_path(order, menu_category_item_id: menu_category_item.id),
+      class: 'transition hover:bg-gray-50 block w-full overflow-hidden rounded h-full',
+      data: { turbo_frame: :modal } do
+    %>
+      <div class="flex items-start justify-between p-3 h-full">
+        <%# Item details %>
+        <div class="shrink grow flex flex-col justify-between h-full w-full">
+          <div class="block">
+            <p class="text-base text-gray-900 leading-normal font-medium">
+              <%= item.name %>
+              <%= render partial: 'items/metadata_icons', locals: { item: } %>
+            </p>
+          </div>
+          <div class="block mt-1">
+            <p class="text-sm text-gray-900 leading-normal font-normal">
+              <%= truncate(item.description, length: 142) %>
+            </p>
+          </div>
+          <%# Price %>
+          <div class="mt-3">
+            <p class="text-base text-gray-500 leading-normal font-normal">
+              <%= item.price&.format %>
+            </p>
+          </div>
+          <%# End of Price %>
+        </div>
+        <%# End of Item details %>
+        <%# Photo %>
+        <% if menu_category_item&.item&.photo&.attached? %>
+          <div class="shrink-0 ml-4">
+            <span class="bg-gray-100 rounded relative block w-24 md:w-28 overflow-hidden" style="padding-bottom: 100%;">
+              <%= render partial: 'items/photo', locals: { item: menu_category_item.item } %>
+            </span>
+          </div>
+        <% end %>
+        <%# End of Photo %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

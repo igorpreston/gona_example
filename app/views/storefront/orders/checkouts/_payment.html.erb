@@ -1,0 +1,41 @@
+
+<%= turbo_frame_tag :order_payment do %>
+  <div class="mt-6">
+    <div class="mt-12 pt-4 border-t border-gray-200">
+      <div class="flex justify-between items-center">
+        <p class="text-sm text-gray-500 leading-normal font-normal">
+          Subtotal
+        </p>
+        <p class="text-sm text-gray-500 leading-normal font-normal">
+          <%= order&.subtotal&.format %>
+        </p>
+      </div>
+      <% if order&.organization&.fee_added? %>
+        <div class="flex justify-between items-center mt-2">
+          <p class="text-sm text-gray-500 leading-normal font-normal">
+            Service fee
+          </p>
+          <p class="text-sm text-gray-500 leading-normal font-normal">
+            <%= order&.application_fee&.format %>
+          </p>
+        </div>
+      <% end %>
+      <div class="flex justify-between items-center mt-2">
+        <p class="text-sm text-gray-500 leading-normal font-normal">
+          Sales tax
+        </p>
+        <p class="text-sm text-gray-500 leading-normal font-normal">
+          <%= order&.tax&.format %>
+        </p>
+      </div>
+      <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
+        <p class="text-lg text-gray-900 leading-normal font-medium">
+          Total
+        </p>
+        <p class="text-lg text-gray-900 leading-normal font-medium">
+          <%= order&.amount.format %>
+        </p>
+      </div>
+    </div>
+  </div>
+<% end %>

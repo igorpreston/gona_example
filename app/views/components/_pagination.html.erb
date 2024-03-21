@@ -1,0 +1,33 @@
+<% link = pagy_link_proc(pagy) %>
+<% disabled_classes = 'btn btn-secondary pointer-events-none select-none opacity-50' %>
+<% active_classes = 'btn btn-secondary' %>
+
+<nav class="flex items-center justify-between" aria-label="Pagination">
+  <div class="hidden sm:block">
+    <p class="text-sm text-gray-500">
+      <%= pluralize(@pagy.count, 'result') %>
+    </p>
+  </div>
+  <div class="flex flex-1 justify-between sm:justify-end">
+    <% if pagy.prev %>
+      <span>
+        <%= link.call(pagy.prev, 'Previous', "aria-label='previous' class='#{active_classes}'").html_safe %>
+      </span>
+    <% else %>
+      <span class="<%= disabled_classes %>">
+        <%= t('pagination.previous') %>
+      </span>
+    <% end %>
+
+
+    <% if pagy.next %>
+      <span class="ml-3">
+        <%= link.call(pagy.next, 'Next', "aria-label='next' class='#{active_classes}'").html_safe %>
+      </span>
+    <% else %>
+      <span class="<%= disabled_classes %> ml-3">
+        <%= t('pagination.next') %>
+      </span>
+    <% end %>
+  </div>
+</nav>

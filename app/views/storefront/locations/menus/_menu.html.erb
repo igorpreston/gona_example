@@ -1,0 +1,18 @@
+<div class="grid grid-cols-1 gap-20">
+  <% menu.menu_categories.each do |menu_category| %>
+    <div class="col" id="<%= menu_category.prefix_id %>">
+      <div class="mb-6 pb-3 border-b border-gray-300">
+        <p class="text-xl font-semibold text-gray-900 leading-normal">
+          <%= menu_category.category_name %>
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <%= render partial:
+          'storefront/locations/menu_category_items/menu_category_item',
+          collection: menu_category.menu_category_items, locals: { order: }
+        %>
+      </div>
+    </div>
+  <% end %>
+</div>

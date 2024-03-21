@@ -1,0 +1,95 @@
+<div class="card overflow-hidden">
+  <div class="card-container">
+    <% if categories&.size&.positive? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-100" cellpadding="0" cellspacing="0" border="0">
+          <thead>
+            <tr class="h-full text-gray-500 text-xs uppercase font-normal leading-normal">
+              <th scope="col" class="h-px w-px" style="min-width: 120px;">
+                <div class="py-2.5 pl-4 pr-3 sm:pl-3 text-left">
+                  <span class="font-normal leading-normal">
+                    Name
+                  </span>
+                </div>
+              </th>
+              <th scope="col" class="h-px w-px" style="min-width: 100px;">
+                <div class="py-2.5 px-3 text-left">
+                  <span class="font-normal leading-normal">
+                    # of items
+                  </span>
+                </div>
+              </th>
+              <th scope="col" class="h-px min-w-px">
+                <div class="py-2.5 px-3 text-left">
+                  <span class="font-normal leading-normal">
+                    Menus
+                  </span>
+                </div>
+              </th>
+              <th scope="col" class="h-px w-px">
+                <div class="py-2.5 pl-3 pr-4 sm:pr-3 text-right">
+                  <span class="font-normal leading-normal text-right">
+                    Updated
+                  </span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% @categories.each do |category| %>
+              <tr class="bg-white hover:bg-gray-50 transition">
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to category_path(category), id: category.prefix_id, class: 'h-full block' do %>
+                    <div class="h-full py-4 pl-4 pr-3 sm:pl-3">
+                      <span class="text-base text-gray-900 leading-normal font-medium overflow-auto">
+                        <%= category.name %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to category_path(category), id: category.prefix_id, class: 'h-full block' do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-500 leading-normal font-normal overflow-auto">
+                        <%= category.items_count %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to category_path(category), id: category.prefix_id, class: 'h-full block' do %>
+                    <div class="h-full flex flex-wrap max-w-md items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto -m-1">
+                      <% category.menus.map do |menu| %>
+                        <span class="tag">
+                          <%= menu.name %>
+                        </span>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to category_path(category), id: category.prefix_id, class: 'h-full block' do %>
+                    <div class="h-full flex items-center justify-end py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-500 leading-normal font-normal">
+                        <%= category.updated_at.localtime.to_fs(:short) %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <%= render partial: 'components/empty_state', locals: {
+        icon: 'inbox',
+        title: 'No categories',
+        description: 'You have not created any categories yet.',
+        buttons: [
+          link_to('Add first category', new_category_path, class: 'btn btn-primary', data: { turbo_frame: :modal })
+        ]
+      } %>
+    <% end %>
+  </div>
+</div>

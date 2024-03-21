@@ -1,0 +1,26 @@
+<div class="block">
+  <div class="mb-8">
+    <%= order.table&.prefix_id %>
+    <%= session[:order_user_id] %>
+  </div>
+  <%= form_with(url: order_equal_split_path(order), method: :patch) do |f| %>
+    <div class="grid grid-cols-1 gap-6">
+      <div>
+        paying for # people
+        <%= f.number_field :paying_for, min: 1, value: nil %>
+      </div>
+      <div>
+        out of # at the table
+        <%= f.number_field :number_of_people, min: 1, value: order.number_of_people %>
+      </div>
+      <div>
+        You are paying $XXX for <%= order.items_count %> items
+      </div>
+      <div>
+        <%= submit_tag "Confirm",
+          { class: 'btn btn-dark w-full btn-md', data: { turbo_submits_with: "Processing...".html_safe } }
+        %>
+      </div>
+    </div>
+  <% end %>
+</div>

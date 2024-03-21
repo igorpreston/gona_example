@@ -1,0 +1,7 @@
+<%= turbo_stream.append(:merchants, partial: 'organizations/merchants/merchant', locals: { merchant: }) %>
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'Invitation sent' } }
+) %>
+<%= turbo_stream.update(:modal, '') %>

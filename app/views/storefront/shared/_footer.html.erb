@@ -1,0 +1,30 @@
+<div class="block mt-20">
+  <div class="content">
+    <div class="text-center py-6">
+      <div class="mb-6">
+        <%= link_to root_url(subdomain: nil), target: :_blank, class: 'flex items-center text-sm text-gray-900 leading-normal font-medium justify-center' do %>
+          powered by
+          <span class="inline mx-2">
+            <%= render partial: 'components/logo', locals: {
+              classes: "h-[20px] w-[20px] p-0.5 rounded-full bg-blue-500 fill-white hover:bg-blue-600 transition"
+            } %>
+          </span>
+          GONA
+        <% end %>
+      </div>
+      <div class="flex items-center justify-center -m-2">
+        <span class="p-2 block">
+          <%= link_to 'Terms', terms_url, target: '_blank', class: 'block text-gray-500 hover:text-gray-900 transition text-sm' %>
+        </span>
+        <span class="p-2">
+          <%= link_to 'Privacy', privacy_url, target: '_blank', class: 'block text-gray-500 hover:text-gray-900 transition text-sm' %>
+        </span>
+      </div>
+      <div class="mt-6">
+        <%= link_to website_url, target: '_blank', class: 'transition text-gray-500 hover:text-gray-900 text-xs leading-normal font-normal' do %>
+          © <%= Time.current.localtime.year %> <%= ENV.fetch('GONA_FOOTER') %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

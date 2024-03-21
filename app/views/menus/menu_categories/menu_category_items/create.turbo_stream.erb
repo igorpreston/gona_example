@@ -1,0 +1,11 @@
+<%= turbo_stream.update(
+  "#{menu_category_item.menu_category&.prefix_id}_menu_category_items",
+  partial: 'menus/menu_categories/menu_category_items',
+  locals: { menu:, menu_category:, menu_category_item: }
+) %>
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'Item created' } }
+) %>
+<%= turbo_stream.update(:modal, '') %>

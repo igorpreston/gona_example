@@ -1,0 +1,41 @@
+<%= form_with model: table,
+  url: table.new_record? ? location_tables_path : location_table_path(table&.location, table),
+  method: table.new_record? ? :post : :patch,
+  local: true,
+  data: { turbo: false } do |f|
+%>
+  <div class="grid grid-cols-1 gap-6">
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :name, 'Public name' %>
+      </div>
+      <div class="block">
+        <%= f.text_field :name, value: f.object&.name, class: 'input', required: true %>
+      </div>
+      <div class="mt-2">
+        <p class="tip">
+          Your customers will see this name when they book a table or scan a QR code.
+        </p>
+      </div>
+    </div>
+    <div class="col flex justify-end -m-2">
+      <% unless f.object.new_record? %>
+        <span class="p-2">
+          <label for="delete" class="btn btn-danger">Delete</label>
+        </span>
+      <% end %>
+      <span class="p-2">
+        <%= submit_tag "Save",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+        %>
+      </span>
+    </div>
+  </div>
+<% end %>
+<%= button_to '',
+  location_table_path(table.location, table),
+  method: :delete,
+  id: 'delete',
+  data: { turbo: false },
+  class: 'hidden' unless table.new_record?
+%>

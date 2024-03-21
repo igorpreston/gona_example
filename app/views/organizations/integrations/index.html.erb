@@ -1,0 +1,15 @@
+<% content_for :title, 'Integrations' %>
+<% content_for :heading, 'Integrations' %>
+
+<%= render partial: 'organizations/header', locals: { back_url: edit_organization_path } %>
+
+<div class="block">
+  <div class="content-md">
+
+    <div class="grid grid-cols-1 gap-6 md:gap-8">
+      <%= render partial: 'organizations/integrations/app',
+        collection: App.where(published: true).order(:name)
+      %>
+    </div>
+  </div>
+</div>

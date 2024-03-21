@@ -1,0 +1,6 @@
+<%= turbo_stream.remove(order_item.prefix_id) %>
+<%= turbo_stream.update(
+  :order,
+  partial: "storefront/locations/orders/#{order.preference&.underscore}",
+  locals: { order:, location: }
+) %>

@@ -1,0 +1,70 @@
+<% content_for :title, 'Edit profile' %>
+
+<div class="m-intro block">
+  <div class="content-md">
+    <h1 class="text-2xl md:text-4xl text-gray-900 leading-normal font-semibold">
+      Edit profile
+    </h1>
+  </div>
+</div>
+
+<div class="block">
+  <div class="content-md">
+    <div class="card">
+      <div class="card-body">
+        <%= form_for(
+          resource,
+          as: resource_name,
+          url: registration_path(resource_name),
+          html: { method: :put }
+        ) do |f| %>
+          <div class="grid grid-cols-1 gap-6">
+            <%= render "devise/shared/error_messages", resource: resource %>
+            <%# First name & Last name %>
+            <div class="col grid grid-cols-2 gap-6">
+              <div class="col">
+                <div class="mb-2">
+                  <%= f.label :first_name, 'First name', class: 'label' %>
+                </div>
+                <div class="block">
+                  <%= f.text_field :first_name, value: current_merchant.first_name, required: true, class: 'input' %>
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-2">
+                  <%= f.label :last_name, 'Last name', class: 'label' %>
+                </div>
+                <div class="block">
+                  <%= f.text_field :last_name, value: current_merchant.last_name, required: true, class: 'input' %>
+                </div>
+              </div>
+            </div>
+            <%# End of First name & Last name %>
+            <%# Email %>
+            <div class="col">
+              <div class="mb-2">
+                <%= f.label :email, 'Email', class: 'label' %>
+              </div>
+              <div class="block">
+                <%= f.email_field :email, value: current_merchant.email, required: true, class: 'input' %>
+              </div>
+              <% unless current_merchant.confirmed_at? %>
+                <div class="mt-2">
+                  <p class="tip">
+                    Requires confirmation.
+                  </p>
+                </div>
+              <% end %>
+            </div>
+            <%# End of Email %>
+            <div class="text-right col">
+              <%= submit_tag "Save profile",
+                { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+              %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

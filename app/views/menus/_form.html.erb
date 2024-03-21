@@ -1,0 +1,138 @@
+<%= form_with model: menu, data: { turbo: false } do |f| %>
+  <div class="grid grid-cols-1 gap-6">
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :name, class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_field :name, class: 'input' %>
+      </div>
+      <div class="mt-1">
+        <p class="tip">
+          Menu name is public and will be displayed on the website.
+        </p>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :description, class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_area :description, value: menu.description, class: 'input', autofocus: false, data: { controller: 'textarea-autogrow', character_counter_target: 'input' } %>
+      </div>
+      <div class="mt-1">
+        <p class="tip">
+          Short descriptions are best. 200 characters or less.
+        </p>
+      </div>
+    </div>
+
+    <!--
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :schedule, 'Schedule', class: 'label' %>
+      </div>
+      <div class="grid grid-cols-1 gap-8">
+        <% Period::DAYS.each do |day| %>
+          <div
+            data-controller="nested-form"
+            data-nested-form-target="container"
+            data-nested-form-association="schedule"
+            data-nested-form-wrapper-selector-value=".nested-form-wrapper"
+          >
+            <% schedule_for_day = f.object.schedule.select { |schedule| schedule.day_of_week == day.to_s } %>
+              <template data-nested-form-target="template">
+                <%= f.fields_for :schedule,
+                  Period.new,
+                  child_index: 'NEW_RECORD' do |schedule_fields| %>
+                  <div class="nested-form-wrapper" data-new-record="true">
+                    <%= schedule_fields.hidden_field :day_of_week, value: day %>
+                    <%= schedule_fields.text_field :start_local_time %>
+                    <%= schedule_fields.text_field :end_local_time %>
+                    <button type="button" data-action="nested-form#remove">Remove Schedule</button>
+                    <%= schedule_fields.hidden_field :_destroy %>
+                  </div>
+                <% end %>
+              </template>
+
+
+
+              <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-3">
+                  <p class="text-sm text-gray-500 leading-normal font-normal">
+                    <%= day.to_s.humanize %>
+                  </p>
+                </div>
+
+                <div class="col-span-9 grid grid-cols-1 gap-4">
+                  <% schedule_for_day.each do |schedule_entry| %>
+                    <%= f.fields_for :schedule, schedule_entry do |schedule_fields| %>
+                      <%= schedule_fields.hidden_field :day_of_week, value: day %>
+                      <div class="nested-form-wrapper grid grid-cols-12 gap-4" data-new-record="false" class="grid grid-cols-2 gap-4">
+                        <div class="col-span-5">
+                          <%= schedule_fields.text_field :start_local_time, class: 'input' %>
+                        </div>
+                        <div class="col-span-5">
+                          <%= schedule_fields.text_field :end_local_time, class: 'input' %>
+                        </div>
+                        <div class="col-span-2">
+                          <%= button_tag type: 'button', data: { action: 'nested-form#remove' } do %>
+                            <%= icon(Rails.application.config.fa_style, 'trash-alt', class: 'text-gray-500 p-1 hover:text-gray-900 transition') %>
+                          <% end %>
+                          <%= schedule_fields.hidden_field :_destroy %>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% end %>
+
+                  <div data-nested-form-target="target"></div>
+
+                  <%= button_tag type: 'button', class: 'btn btn-secondary w-full', data: { action: 'nested-form#add', target: 'template' } do %>
+                    <%= icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') %>
+                    Add Schedule for <%= day %>
+                  <% end %>
+                </div>
+
+              </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    -->
+
+    <div class="col">
+      <%= react_component 'HeadlessCombobox',
+        label: 'Locations',
+        input_id: f.field_id(:location_ids),
+        multiple: true,
+        display_key: 'name',
+        value_key: 'id',
+        input_key: f.field_name(:location_ids, multiple: true),
+        initial_options: Location.select(:id, :name).map(&:as_json),
+        initial_selected: menu.locations.select(:id, :name).map(&:as_json)
+
+      %>
+    </div>
+
+    <div class="col text-right -m-2">
+      <% unless f.object.new_record? %>
+        <span class="p-2">
+          <label for="delete" class="btn btn-danger">Delete</label>
+        </span>
+      <% end %>
+      <span class="p-2">
+        <%= submit_tag "Save",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+        %>
+      </span>
+    </div>
+  </div>
+<% end %>
+<%= button_to '',
+  menu_path(menu),
+  method: :delete,
+  id: 'delete',
+  data: { turbo: false },
+  class: 'hidden' unless menu.new_record?
+%>

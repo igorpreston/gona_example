@@ -1,0 +1,195 @@
+<%= form_for item, data: { turbo: false } do |f| %>
+  <div class="grid grid-cols-1 gap-6">
+
+    <div class="col flex items-center">
+      <div class="mr-4">
+        <%= f.label :photo, class: 'inline-flex justify-center text-center items-center h-20 w-20 md:h-24 md:w-24 bg-gray-100 rounded overflow-hidden text-2xl relative' do %>
+          <%= render partial: 'items/photo', locals: { item: } %>
+        <% end %>
+      </div>
+      <div>
+        <%= f.file_field :photo, class: 'block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-900 hover:file:bg-gray-900 hover:file:text-white file:cursor-pointer' %>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="block mb-2">
+        <%= f.label :name, class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_field :name, class: 'input', required: true %>
+      </div>
+      <div class="mt-1">
+        <p class="tip">
+          Name of the item that will be displayed to customers.
+        </p>
+      </div>
+    </div>
+
+    <div class="col">
+      <%= react_component 'HeadlessCombobox',
+        label: 'Categories',
+        input_id: f.field_id(:category_ids),
+        multiple: true,
+        display_key: 'name',
+        value_key: 'id',
+        input_key: f.field_name(:category_ids, multiple: true),
+        initial_options: current_tenant.categories.select(:id, :name).map(&:as_json),
+        initial_selected: item.categories.select(:id, :name).map(&:as_json)
+      %>
+    </div>
+
+    <% if f.object.catalog? %>
+      <div class="col">
+        <%= react_component 'HeadlessCombobox',
+          label: 'Modifiers',
+          input_id: f.field_id(:modifier_ids),
+          multiple: true,
+          display_key: 'name',
+          value_key: 'id',
+          input_key: f.field_name(:modifier_ids, multiple: true),
+          initial_options: current_tenant.modifiers.select(:id, :name).map(&:as_json),
+          initial_selected: item.modifiers.select(:id, :name).map(&:as_json)
+        %>
+      </div>
+    <% end %>
+
+    <div class="col">
+      <div class="block mb-2">
+        <%= f.label :description, class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_area :description, value: item.description, class: 'input', autofocus: false, data: { controller: 'textarea-autogrow', character_counter_target: 'input' } %>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="block mb-2">
+        <%= f.label :price, class: 'label' %>
+      </div>
+      <div class="block relative">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <span class="text-gray-500 sm:text-base">$</span>
+        </div>
+        <%= f.text_field :price, value: item.price, class: 'input pl-9' %>
+      </div>
+    </div>
+
+    <%# Metadata %>
+    <%= f.fields_for :metadata do |ff| %>
+      <%# Temperature %>
+      <div class="col">
+        <div class="block mb-2">
+          <%= ff.label :temperature, 'Temperature', class: 'label' %>
+        </div>
+        <div class="block relative">
+          <%= ff.select :temperature, Item::Metadata::TEMPERATURES.keys.map { |t| [t.to_s.titleize, t] }, { include_blank: 'Optional select', selected: f.object.metadata.temperature }, class: 'input' %>
+        </div>
+      </div>
+      <%# End of Temperature %>
+
+      <%# Cal & Kj %>
+      <div class="col grid grid-cols-2 gap-4">
+        <div class="block">
+          <div class="col">
+            <div class="block mb-2">
+              <%= ff.label :energy_cal, 'Energy Cal', class: 'label' %>
+            </div>
+            <div class="block relative">
+              <%= ff.number_field :energy_cal, value: f.object.metadata.energy_cal, class: 'input', min: 0 %>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="col">
+            <div class="block mb-2">
+              <%= ff.label :energy_kj, 'Energy Kj', class: 'label' %>
+            </div>
+            <div class="block relative">
+              <%= ff.number_field :energy_kj, value: f.object.metadata.energy_kj, class: 'input', min: 0 %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%# End of Cal & Kj %>
+
+      <%# Vegan %>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-9">
+          <%= ff.label :vegan, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+            Vegan?
+            <%= icon(Rails.application.config.fa_style, 'seedling', class: 'ml-2 text-green-600') %>
+          <% end %>
+        </div>
+        <div class="col-span-3 text-right">
+          <%= ff.check_box :vegan, type: 'checkbox', class: 'checkbox', checked: f.object.metadata.vegan %>
+        </div>
+      </div>
+      <%# End of Vegan %>
+
+      <%# Vegan %>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-9">
+          <%= ff.label :vegetarian, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+            Vegetarian?
+            <%= icon(Rails.application.config.fa_style, 'salad', class: 'ml-2 text-pink-600') %>
+          <% end %>
+        </div>
+        <div class="col-span-3 text-right">
+          <%= ff.check_box :vegetarian, type: 'checkbox', class: 'checkbox', checked: f.object.metadata.vegetarian %>
+        </div>
+      </div>
+      <%# End of Vegan %>
+
+      <%# Vegan %>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-9">
+          <%= ff.label :gluten_free, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+            Gluten free?
+            <%= icon(Rails.application.config.fa_style, 'wheat-slash', class: 'ml-2 text-yellow-600') %>
+          <% end %>
+        </div>
+        <div class="col-span-3 text-right">
+          <%= ff.check_box :gluten_free, type: 'checkbox', class: 'checkbox', checked: f.object.metadata.gluten_free %>
+        </div>
+      </div>
+      <%# End of Vegan %>
+
+      <%# Spicy %>
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-9">
+          <%= ff.label :spicy, class: 'text-sm text-gray-900 leading-normal font-normal' do %>
+            Spicy?
+            <%= icon(Rails.application.config.fa_style, 'pepper-hot', class: 'ml-2 text-red-600') %>
+          <% end %>
+        </div>
+        <div class="col-span-3 text-right">
+          <%= ff.check_box :spicy, type: 'checkbox', class: 'checkbox', checked: f.object.metadata.spicy %>
+        </div>
+      </div>
+      <%# End of Spicy %>
+    <% end %>
+    <%# End of Metadata %>
+
+    <div class="col flex justify-end -m-2">
+      <% unless f.object.new_record? %>
+        <span class="p-2">
+          <label for="delete" class="btn btn-danger">Delete</label>
+        </span>
+      <% end %>
+      <span class="p-2">
+        <%= submit_tag "Save",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+        %>
+      </span>
+    </div>
+  </div>
+<% end %>
+<%= button_to '',
+  item_path(item),
+  method: :delete,
+  id: 'delete',
+  data: { turbo: false },
+  class: 'hidden' unless item.new_record?
+%>

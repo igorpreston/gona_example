@@ -1,0 +1,8 @@
+:concurrency: <%= ENV.fetch('SIDEKIQ_CONCURRENCY') { 2 } %>
+:queues:
+  - default
+  - clover
+  - square
+  - stripe
+  - mailers
+  - event_handlers

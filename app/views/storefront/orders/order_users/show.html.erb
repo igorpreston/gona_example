@@ -1,0 +1,69 @@
+<% content_for :title, "#{order.number} – #{order.organization&.name}" %>
+
+<%# Tracking %>
+<% unless order.completed? %>
+  <div class="mt-4 block">
+    <div class="content-sm">
+      <%= render partial: 'storefront/orders/order_users/tracker', locals: { order: } %>
+    </div>
+  </div>
+<% end %>
+<%# End of Tracking %>
+
+<%# Payment %>
+<div class="mt-8">
+  <div class="content-sm">
+    <%= render partial: 'storefront/orders/order_users/payment', locals: { order:, order_user: } %>
+  </div>
+</div>
+<%# End of Payment %>
+
+<%# Review %>
+<% if order.completed? && order_user.feedback.blank? %>
+  <div class="mt-8">
+    <div class="content-sm">
+      <%= turbo_frame_tag :order_review do %>
+        <%= render partial: 'storefront/orders/order_users/review', locals: { order_user:, order: } %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<%# End of Review %>
+
+<%# Order details %>
+<% unless order.completed? %>
+  <div class="mt-12">
+    <div class="content-sm">
+      <%= render partial: "storefront/orders/order_users/preferences/#{order.preference&.underscore}",
+        locals: { order: }
+      %>
+    </div>
+  </div>
+<% end %>
+<%# End of Order details %>
+
+<%# Order Items %>
+<div class="mt-12">
+  <div class="content-sm">
+    <div class="mb-6">
+      <p class="text-base text-gray-900 font-semibold leading-normal">
+        <%= pluralize(order.items_count, 'item') %>
+      </p>
+    </div>
+    <div class="grid grid-cols-1 gap-4">
+      <% order.order_items.includes(:item).each do |oi| %>
+        <div class="col flex items-center justify-between">
+          <span class="h-[26px] min-w-[26px] text-center flex items-center justify-center p-1 bg-gray-100 text-gray-900 font-normal text-xs rounded shrink-0">
+            <%= oi.quantity %>
+          </span>
+          <div class="w-full ml-3">
+            <p class="text-sm text-gray-900 leading-normal font-normal">
+              <%= oi.item&.name %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%# End of Order Items %>

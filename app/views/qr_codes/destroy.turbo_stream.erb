@@ -1,0 +1,7 @@
+<%= turbo_stream.remove(qr_code.prefix_id) %>
+<%= turbo_stream.prepend(
+  :flash,
+  partial: 'components/flash',
+  locals: { flash: { notice: 'QR code was successfully deleted.' } }
+) %>
+<%= turbo_stream.update(:modal, '') %>

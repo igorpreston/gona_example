@@ -1,0 +1,206 @@
+<% content_for :title, 'Menus' %>
+<% heading = @menu.name %>
+
+<%= render layout: 'layouts/menu' do |f| %>
+  <%# Heading %>
+  <div class="block mb-8">
+    <div class="content">
+      <%# Header %>
+      <div class="flex">
+        <%# Heading %>
+        <div class="w-full flex-grow flex">
+          <%# Back button %>
+          <div class="mr-4 shrink-0">
+            <%= link_to menus_path, class: 'btn' do %>
+              <%= icon(Rails.application.config.fa_style, "arrow-left") %>
+            <% end %>
+          </div>
+          <%# End of Back button %>
+
+          <%# Title %>
+          <div class="flex items-center flex-col">
+            <h1 class="text-2xl font-semibold text-gray-900">
+              <%= menu.name %>
+            </h1>
+          </div>
+          <%# End of Title %>
+        </div>
+        <%# End of Heading %>
+        <%# Header actions %>
+        <div class="shrink-0">
+          <div class="flex items-center flex-wrap -m-2">
+            <span class="shrink-0 p-2">
+              <%= link_to menu_categories_path(menu), class: 'btn btn-primary', data: {
+                turbo_frame: :modal
+              } do %>
+                <%= icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') %>
+                Add category
+              <% end %>
+            </span>
+            <span class="shrink-0 p-2 relative" data-controller="dropdown">
+              <%= button_tag class: 'btn btn-secondary', data: {
+                action: 'dropdown#toggle click@window->dropdown#hide'
+              } do %>
+                Actions
+                <%= icon(Rails.application.config.fa_style, 'angle-down', class: 'ml-2') %>
+              <% end %>
+
+              <div
+                data-dropdown-target="menu"
+                class="hidden transition transform origin-top-right absolute right-0 z-20"
+                data-transition-enter-from="opacity-0 scale-95"
+                data-transition-enter-to="opacity-100 scale-100"
+                data-transition-leave-from="opacity-100 scale-100"
+                data-transition-leave-to="opacity-0 scale-95"
+              >
+                <div class="absolute right-0 top-2 w-44 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                  <div class="py-1" role="none">
+                    <ul class="grid grid-cols-1">
+                      <li class="p-1">
+                        <%= button_to menu_publish_path(menu, published: menu.published? ? false : true), method: :patch, class: 'text-gray-900 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' do %>
+                          <%= icon(
+                            Rails.application.config.fa_style,
+                            menu.published? ? 'eye-slash' : 'eye',
+                            class: 'mr-1'
+                          ) %>
+                          <%= menu.published? ? 'Unpublish' : 'Publish' %>
+                        <% end %>
+                      </li>
+                      <li class="p-1">
+                        <%= active_link_to edit_menu_path(menu), data: { turbo_frame: :modal }, class: 'text-gray-900 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' do %>
+                          <%= icon(Rails.application.config.fa_style, 'pencil', class: 'mr-1') %>
+                          Edit
+                        <% end %>
+                      </li>
+                      <li class="p-1">
+                        <%= button_to menu_path(menu), method: :delete, class: 'text-red-600 block px-4 py-2 text-sm w-full text-left rounded hover:bg-gray-100 transition', role: 'menuitem', tabindex: '-1' do %>
+                          <%= icon(Rails.application.config.fa_style, 'trash', class: 'mr-1') %>
+                          Delete
+                        <% end %>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+        <%# End of Header actions %>
+      </div>
+      <%# End of Header %>
+    </div>
+  </div>
+  <%# End of Heading %>
+
+  <div class="block">
+    <div class="content">
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <%# Items %>
+        <div class="lg:col-span-8">
+
+          <%# Categories %>
+          <%= turbo_frame_tag :menu_categories do %>
+            <%= render partial: 'menus/menu_categories', locals: {
+              menu:, menu_categories: menu.menu_categories.includes(:category)
+            } %>
+          <% end %>
+          <%# End of Categories %>
+
+        </div>
+        <%# End of Items %>
+        <%# Sidebar %>
+        <div class="lg:col-span-4">
+          <div class="grid grid-cols-1 gap-6">
+            <%# Details %>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex-grow">
+                  <p class="text-base text-gray-900 leading-normal font-medium">
+                    Details
+                  </p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-1 gap-2">
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-2">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Currently:
+                      </p>
+                    </div>
+                    <div class="col-span-4">
+                      <p class="text-sm text-gray-900 leading-normal font-normal">
+                        <%= menu.open? ? 'Online' : 'Offline' %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-2">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Status:
+                      </p>
+                    </div>
+                    <div class="col-span-4">
+                      <%= render partial: "menus/statuses/#{menu.status.underscore}", locals: { menu: } %>
+                    </div>
+                  </div>
+                  <div class="col grid grid-cols-6 gap-4">
+                    <div class="col-span-2">
+                      <p class="text-sm text-gray-500 leading-normal font-normal">
+                        Last update:
+                      </p>
+                    </div>
+                    <div class="col-span-4">
+                      <p class="text-sm text-gray-900 leading-normal font-normal">
+                        <%= menu.updated_at.localtime.to_fs(:short) %>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <%# End of Schedule %>
+            <%# Schedule %>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex-grow">
+                  <p class="text-base text-gray-900 leading-normal font-medium">
+                    Schedule
+                  </p>
+                </div>
+                <div class="ml-4 shrink-0">
+                  <%= link_to 'Edit', edit_menu_path(menu), class: 'link', data: { turbo_frame: :modal } %>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="grid grid-cols-1 gap-4">
+                  <%= render partial: 'menus/schedule', locals: { menu: } %>
+                </div>
+              </div>
+            </div>
+            <%# End of Schedule %>
+            <%# Locations %>
+            <div class="card">
+              <div class="card-header">
+                <div class="flex-grow">
+                  <p class="text-base text-gray-900 leading-normal font-medium">
+                    Used by <%= pluralize(menu.locations_count, 'location') %>
+                  </p>
+                </div>
+              </div>
+              <div class="card-body">
+                <%= turbo_frame_tag :menu_locations, src: menu_locations_path(menu), lazy: true do %>
+                  <%= render partial: 'components/loading' %>
+                <% end %>
+              </div>
+            </div>
+            <%# End of Locations %>
+          </div>
+        </div>
+        <%# End of Sidebar %>
+      </div>
+
+    </div>
+  </div>
+<% end %>

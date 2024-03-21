@@ -1,0 +1,85 @@
+<%
+  main_links = [
+    # {
+    #   label: t('subnav.links.home'),
+    #   path: root_path,
+    #   active: :exact,
+    #   icon: 'grid-2'
+    # },
+    {
+      label: t('subnav.links.orders'),
+      path: orders_path,
+      active: :inclusive,
+      icon: 'inbox'
+    },
+    {
+      label: t('subnav.links.menus'),
+      path: menus_path,
+      active: [['menus', 'categories', 'modifiers', 'items'], []],
+      icon: 'book-open'
+    },
+    {
+      label: t('subnav.links.locations'),
+      path: locations_path,
+      active: :inclusive,
+      icon: 'map-location'
+    },
+    {
+      label: 'Feedback',
+      path: feedbacks_path,
+      active: :inclusive,
+      icon: 'comments'
+    }
+  ]
+%>
+
+<% secondary_links = [
+  {
+    label: 'Settings',
+    path: edit_organization_path,
+    icon: 'cog'
+  }
+] %>
+
+<div
+  class="hidden overflow-y-auto lg:flex lg:justify-between lg:items-center lg:flex-col lg:shrink-0 bg-white"
+>
+  <%# Main links %>
+  <div class=" flex items-center p-4 md:p-8 lg:p-6">
+    <nav class="flex w-full">
+      <ul role="list" class="grid grid-cols-1 gap-5">
+        <li class="relative">
+          <%= active_link_to root_path, active: :exact, class: 'text-lg flex items-center justify-center text-center rounded w-10 h-10 transition', class_active: 'text-white bg-gray-900', class_inactive: 'text-gray-500 bg-transparent hover:bg-gray-100 hover:text-gray-900' do %>
+            <span class="bg-gray-100 rounded h-full w-full block overflow-hidden relative">
+              <%= render partial: 'organizations/logo', locals: { organization: current_tenant } %>
+            </span>
+          <% end %>
+        </li>
+
+        <% main_links.map do |link| %>
+          <li class="relative">
+            <%= active_link_to link[:path], active: link[:active], class: 'text-xl flex items-center justify-center text-center rounded w-10 h-10 transition', class_active: 'text-gray-900 bg-gray-100', class_inactive: 'text-gray-500 bg-transparent hover:text-gray-900' do %>
+              <%= icon(Rails.application.config.fa_style, link[:icon]) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+  </div>
+  <%# End of Main links %>
+  <%# Secondary links %>
+  <div class=" flex items-center p-4 md:p-8 lg:p-6">
+    <nav class="flex w-full">
+      <ul role="list" class="grid grid-cols-1 gap-5">
+        <% secondary_links.map do |link| %>
+          <li class="relative">
+            <%= link_to link[:path], active: link[:active], class: 'text-xl flex items-center justify-center text-center rounded w-10 h-10 transition text-gray-500 bg-transparent hover:bg-gray-100 hover:text-gray-900' do %>
+              <%= icon(Rails.application.config.fa_style, link[:icon]) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
+  </div>
+  <%# End of Secondary links %>
+</div>

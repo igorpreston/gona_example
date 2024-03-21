@@ -1,0 +1,7 @@
+<%= turbo_frame_tag :logos do %>
+  <%= render partial: 'organizations/generals/forms/logos', locals: { organization: } %>
+<% end %>
+
+<%= turbo_frame_tag :public_information do %>
+  <%= render partial: 'organizations/generals/forms/public_information', locals: { organization: } %>
+<% end %>

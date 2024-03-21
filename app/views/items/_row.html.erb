@@ -1,0 +1,12 @@
+<%= turbo_frame_tag item.prefix_id, class: 'col' do %>
+  <div class="flex items-center justify-between">
+    <div class="relative h-10 w-10 shrink-0 mr-2 rounded overflow-hidden bg-gray-100 text-sm text-gray-500 leading-normal font-normal">
+      <%= render partial: 'items/photo', locals: { item: } %>
+    </div>
+    <div class="flex-grow w-full">
+      <p class="text-sm text-gray-900 leading-normal font-normal">
+        <%= item.name %>
+      </p>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,21 @@
+<% content_for :title, 'Categories' %>
+<% content_for :heading, 'Categories' %>
+<% buttons = [
+  link_to(new_category_path, class: 'btn btn-primary', data: { turbo_frame: :modal }) do
+    icon(Rails.application.config.fa_style, 'plus', class: 'mr-2') + 'Add item'
+  end
+] %>
+
+<%= render layout: 'layouts/menu' do |f| %>
+  <%= render partial: 'menus/header', locals: { buttons: } %>
+
+  <div class="block mt-12">
+    <div class="content">
+      <%= render partial: 'categories/categories', locals: { categories: @categories } %>
+
+      <div class="mt-8">
+        <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,45 @@
+<%= turbo_frame_tag menu_category.prefix_id do %>
+  <div class="card">
+    <%# Menu Category Header %>
+    <div class="card-header sticky top-0 bg-white z-10 pb-4 md:pb-6 rounded">
+      <div class="flex-grow">
+        <p class="text-base text-gray-900 leading-normal font-medium">
+          <%= menu_category.category&.name %>
+          <span class="text-sm text-gray-500 font-normal">
+            (<%= pluralize(menu_category.menu_category_items.count, 'item') %>)
+          </span>
+        </p>
+      </div>
+      <div class="flex-shrink-0 ml-4">
+        <div class="flex items-center -m-2">
+          <span class="p-2 flex items-center">
+            <%= link_to menu_menu_category_items_path(menu_category.menu, menu_category),
+              class: 'flex items-center text-gray-500 hover:text-gray-900 transition text-sm',
+              data: { turbo_frame: :modal } do
+            %>
+              <%= icon(Rails.application.config.fa_style, 'plus') %>
+              <span class="hidden md:block md:ml-2">Add item</span>
+            <% end %>
+          </span>
+          <span class="p-2 flex items-center">
+            <%= link_to edit_menu_menu_category_path(menu_category.menu, menu_category),
+              class: 'flex items-center text-gray-500 hover:text-gray-900 transition text-sm',
+              data: { turbo_frame: :modal } do
+            %>
+              <%= icon(Rails.application.config.fa_style, 'pen') %>
+              <span class="hidden md:block md:ml-2">Edit</span>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <%# End of Menu Category Header %>
+    <%# Items %>
+    <div class="card-body border-t border-gray-100">
+      <%= turbo_frame_tag "#{menu_category.prefix_id}_menu_category_items" do %>
+        <%= render partial: 'menus/menu_categories/menu_category_items', locals: { menu:, menu_category: } %>
+      <% end %>
+    </div>
+    <%# End of Items %>
+  </div>
+<% end %>

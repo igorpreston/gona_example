@@ -1,0 +1,10 @@
+<span class="avatar avatar-<%= merchant.color || 'slate' %>">
+  <% if merchant.avatar.attached? %>
+    <%= cl_image_tag(
+      user.avatar.key,
+      class: 'w-full h-full object-cover'
+    ) %>
+  <% else %>
+    <%= merchant.first_name.first %>
+  <% end %>
+</span>

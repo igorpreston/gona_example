@@ -1,0 +1,16 @@
+<% content_for :title, menu_category.category&.name %>
+<% content_for :heading, menu_category.category&.name %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div>
+    <%= render partial: 'menus/menu_categories/form', locals: {
+      menu_category:,
+      menu:,
+      url: menu_menu_category_path(menu, menu_category)
+    } %>
+  </div>
+<% end %>

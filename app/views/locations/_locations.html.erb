@@ -1,0 +1,141 @@
+<% local_assigns[:headers] = true if local_assigns[:headers].nil? %>
+
+<div class="card overflow-hidden">
+  <div class="card-container">
+    <% if locations&.size&.positive? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-100" cellpadding="0" cellspacing="0" border="0">
+          <% if headers %>
+            <thead>
+              <tr class="h-full text-gray-500 text-xs uppercase font-normal leading-normal">
+                <th scope="col" class="h-px w-px" style="min-width: 120px;">
+                  <div class="py-2.5 pl-4 pr-3 sm:pl-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Name
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px w-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="sr-only font-normal leading-normal">
+                      Location Type
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Address
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="font-normal leading-normal">
+                      City, Province
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px">
+                  <div class="py-2.5 px-3 text-left">
+                    <span class="font-normal leading-normal">
+                      Phone
+                    </span>
+                  </div>
+                </th>
+                <th scope="col" class="h-px w-px">
+                  <div class="py-2.5 pl-3 pr-4 sm:pr-3 text-right">
+                    <span class="font-normal leading-normal text-right">
+                      Email
+                    </span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+          <% end %>
+          <tbody class="divide-y divide-gray-100">
+            <% locations&.each do |location| %>
+              <tr class="bg-white hover:bg-gray-50 transition">
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to location, id: location.prefix_id, class: 'h-full block', data: { turbo: false } do %>
+                    <div class="h-full py-4 pl-4 pr-3 sm:pl-3">
+                      <span class="text-base text-gray-900 leading-normal font-medium overflow-auto">
+                        <%= location.name %>
+
+                        <% if location.integration? %>
+                          <span class="ml-2">
+                            <%= icon(
+                              Rails.application.config.fa_style,
+                              'grid-2-plus',
+                              class: 'text-blue-600'
+                            ) %>
+                          </span>
+                        <% end %>
+
+                        <span class="ml-2 h-2 w-2 inline-block rounded-full <%= location.open? ? 'bg-green-500' : 'bg-gray-300' %>"></span>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to location, id: location.prefix_id, class: 'h-full block', data: { turbo: false } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-900 leading-normal font-normal overflow-auto">
+                        <%= location.location_type&.humanize %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to location, id: location.prefix_id, class: 'h-full block', data: { turbo: false } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-500 leading-normal">
+                        <%= location.address&.line_one %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to location, id: location.prefix_id, class: 'h-full block', data: { turbo: false } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-900 leading-normal">
+                        <%= location.address&.city %>, <%= location.address&.state %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to location, id: location.prefix_id, class: 'h-full block', data: { turbo: false } do %>
+                    <div class="h-full flex items-center py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-900 leading-normal">
+                        <%= location.phone %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="h-px whitespace-nowrap">
+                  <%= link_to location, id: location.prefix_id, class: 'h-full block', data: { turbo: false } do %>
+                    <div class="h-full flex items-center justify-end py-4 pl-4 pr-3 sm:pl-3 overflow-auto">
+                      <span class="text-base text-gray-500 leading-normal font-normal">
+                        <%= location.email %>
+                      </span>
+                    </div>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <%= render partial: 'components/empty_state', locals: {
+        icon: 'inbox',
+        title: 'No locations',
+        description: 'You have not added any locations yet.',
+        buttons: [
+          link_to('Add first location', new_location_path, class: 'btn btn-primary')
+        ]
+      } %>
+    <% end %>
+  </div>
+</div>

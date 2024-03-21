@@ -1,0 +1,116 @@
+<% content_for :title, 'Settings' %>
+<% content_for :heading, 'Settings' %>
+<% settings_block = [
+  {
+    label: 'General',
+    settings: [
+      {
+        icon: 'store',
+        label: 'Account information',
+        path: organization_general_path,
+        external: false
+      },
+      {
+        icon: 'info-circle',
+        label: 'Business information',
+        path: organization_stripe_account_link_path,
+        external: true
+      },
+      {
+        icon: 'users',
+        label: 'Users & Permissions',
+        path: organization_merchants_path,
+        external: false
+      }
+    ]
+  },
+  {
+    label: 'Subscriptions',
+    settings: [
+      {
+        icon: 'money-bill',
+        label: 'Manage account plan',
+        path: organization_billing_path,
+        external: true
+      },
+      {
+        icon: 'gem',
+        label: 'Available plans',
+        path: organization_subscription_path,
+        external: false
+      }
+    ]
+  },
+  {
+    label: 'Connected Applications',
+    settings: [
+      {
+        icon: 'grid-2-plus',
+        label: 'Integrations',
+        path: organization_integrations_path,
+        external: false
+      }
+    ]
+  }
+]
+%>
+
+
+<div class="m-intro block">
+  <div class="content-md">
+    <div class="grid grid-cols-1 gap-12">
+      <% settings_block.each do |section| %>
+        <% next if section[:label] == 'Subscriptions' && !current_tenant.subscription? %>
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <div class="grow shrink w-full">
+                <p class="text-gray-900 text-base font-medium leading-normal">
+                  <%= section[:label] %>
+                </p>
+              </div>
+            </div>
+
+            <div class="card-body overflow-hidden">
+              <ul class="grid grid-cols-1 gap-0 -m-3">
+                <% section[:settings].each do |setting| %>
+                  <li class="relative col block">
+                    <%= link_to setting[:path], class: 'p-3 transition hover:bg-gray-50 flex items-center w-full rounded' do %>
+                      <span class="h-8 w-8 shrink-0 mr-4 bg-gray-100 flex items-center justify-center text-center rounded text-gray-500 text-base">
+                        <%= icon(
+                          Rails.application.config.fa_style,
+                          setting[:icon]
+                        ) %>
+                      </span>
+                      <div class="w-full grow shrink">
+                        <p class="text-base text-gray-900 leading-normal font-normal">
+                          <%= setting[:label] %>
+                        </p>
+                      </div>
+                      <div class="shrink-0 ml-4">
+                        <% if setting[:external] %>
+                          <%= icon(
+                            Rails.application.config.fa_style,
+                            'arrow-up-right-from-square',
+                            class: 'text-gray-500 text-base'
+                          ) %>
+                        <% else %>
+                          <%= icon(
+                            Rails.application.config.fa_style,
+                            'chevron-right',
+                            class: 'text-gray-500 text-base'
+                          ) %>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

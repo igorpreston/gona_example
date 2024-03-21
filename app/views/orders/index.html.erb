@@ -1,0 +1,155 @@
+<% content_for :title, t('orders.index.title') %>
+
+<% if current_tenant.onboarding? %>
+  <%= turbo_frame_tag :onboarding, src: onboardings_path, loading: :lazy do %>
+    <%= render partial: 'components/loading' %>
+  <% end %>
+<% else %>
+  <div class="block m-intro">
+    <div class="content">
+
+      <div class="flex">
+        <%# Heading %>
+        <div class="w-full flex-grow">
+          <h1 class="text-2xl font-semibold leading-normal text-gray-900">
+            Orders:
+            <span
+              class="relative"
+              data-controller="dropdown"
+            >
+              <%= button_tag data: { action: 'dropdown#toggle click@window->dropdown#hide' },
+                class: 'font-medium text-blue-600' do %>
+                <%= params[:location_name] || 'All locations' %>
+                <%= icon(Rails.application.config.fa_style, 'angle-down', class: 'text-base leading-normal') %>
+              <% end %>
+              <%# Dropdown %>
+              <div
+                data-dropdown-target="menu"
+                class="hidden transition transform absolute right-auto z-10"
+                data-transition-enter-from="opacity-0"
+                data-transition-enter-to="opacity-100"
+                data-transition-leave-from="opacity-100"
+                data-transition-leave-to="opacity-0"
+              >
+                <div class="absolute top-2 w-full min-w-[240px] max-h-96 overflow-y-auto origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                  <%= turbo_frame_tag :orders_locations, src: order_locations_path, lazy: true  do %>
+                    <%= render partial: 'components/loading' %>
+                  <% end %>
+                </div>
+              </div>
+              <%# End of Dropdown %>
+            </span>
+          </h1>
+        </div>
+        <%# End of Heading %>
+        <%# Header actions %>
+        <% unless Rails.env.production? %>
+          <div class="shrink-0">
+            <div class="flex items-center flex-wrap -m-2">
+              <span class="shrink-0 p-2">
+                <%= button_to orders_path, method: :post, class: 'btn btn-secondary' do %>
+                  <%= icon(Rails.application.config.fa_style, 'wand-magic-sparkles', class: 'mr-2') %>
+                  Test order
+                <% end %>
+              </span>
+            </div>
+          </div>
+        <% end %>
+        <%# End of Header actions %>
+      </div>
+    </div>
+  </div>
+
+  <div class="block mt-8">
+    <div class="content">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
+
+        <div class="card">
+          <div class="card-header">
+            <p class="text-sm text-gray-500 leading-normal font-normal">
+              Orders today
+            </p>
+          </div>
+          <div class="card-body">
+            <p class="text-xl font-semibold text-gray-900 leading-normal">
+              <%= turbo_frame_tag :orders_today,
+                src: order_count_total_path(location_id: params[:location_id] || nil), lazy: true do
+              %>
+                <%= icon(
+                  "#{Rails.application.config.fa_style} fa-solid fa-spin", 'spinner-third', class: 'text-gray-500'
+                ) %>
+              <% end %>
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <p class="text-sm text-gray-500 leading-normal font-normal">
+              Fulfilled today
+            </p>
+          </div>
+          <div class="card-body">
+            <p class="text-xl font-semibold text-gray-900 leading-normal">
+              <%= turbo_frame_tag :orders_fulfilled,
+                src: order_count_fulfilled_path(location_id: params[:location_id] || nil), lazy: true do
+              %>
+                <%= icon(
+                  "#{Rails.application.config.fa_style} fa-solid fa-spin", 'spinner-third', class: 'text-gray-500'
+                ) %>
+              <% end %>
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <p class="text-sm text-gray-500 leading-normal font-normal">
+              Time to fulfill today
+            </p>
+          </div>
+          <div class="card-body">
+            <p class="text-xl font-semibold text-gray-900 leading-normal">
+              <%= turbo_frame_tag :orders_fulfillment_time,
+                src: order_count_fulfillment_time_path(location_id: params[:location_id] || nil), lazy: true do
+              %>
+                <%= icon(
+                  "#{Rails.application.config.fa_style} fa-solid fa-spin", 'spinner-third', class: 'text-gray-500'
+                ) %>
+              <% end %>
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <p class="text-sm text-gray-500 leading-normal font-normal">
+              Canceled today
+            </p>
+          </div>
+          <div class="card-body">
+            <p class="text-xl font-semibold text-gray-900 leading-normal">
+              <%= turbo_frame_tag :orders_cancellations,
+                src: order_count_cancellations_path(location_id: params[:location_id] || nil), lazy: true do
+              %>
+                <%= icon(
+                  "#{Rails.application.config.fa_style} fa-solid fa-spin", 'spinner-third', class: 'text-gray-500'
+                ) %>
+              <% end %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block mt-12">
+    <div class="content">
+      <%= render partial: 'orders/orders', locals: { orders: @orders } %>
+
+      <div class="mt-8">
+        <%= render partial: 'components/pagination', locals: { pagy: @pagy } %>
+      </div>
+    </div>
+  </div>
+<% end %>

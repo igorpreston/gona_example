@@ -1,0 +1,11 @@
+<% if current_tenant.onboarding? %>
+  <%= turbo_frame_tag :onboarding, src: onboardings_path, loading: :lazy do %>
+    <%= render partial: 'components/loading' %>
+  <% end %>
+<% else %>
+  <div class="block mt-8">
+    <div class="content text-center">
+      Your account is setting up. Please wait.
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,40 @@
+<%= form_with model: category,
+  url: local_assigns.has_key?(:url) ? url : categories_path,
+  data: { turbo: false } do |f|
+%>
+  <div class="grid grid-cols-1 gap-6">
+    <div class="col">
+      <div class="mb-2">
+        <%= f.label :name, 'Category name', class: 'label' %>
+      </div>
+      <div class="block">
+        <%= f.text_field :name, class: 'input', value: category.name %>
+      </div>
+      <div class="mt-1">
+        <p class="tip">
+          Your customers will see this name on the menus where this category is used.
+        </p>
+      </div>
+    </div>
+
+    <div class="col flex justify-end -m-2">
+      <% unless f.object.new_record? %>
+        <span class="p-2">
+          <label for="delete" class="btn btn-danger">Delete</label>
+        </span>
+      <% end %>
+      <span class="p-2">
+        <%= submit_tag "Save",
+          { class: 'btn btn-primary', data: { turbo_submits_with: "Saving...".html_safe } }
+        %>
+      </span>
+    </div>
+  </div>
+<% end %>
+<%= button_to '',
+  category_path(category),
+  method: :delete,
+  id: 'delete',
+  data: { turbo: false },
+  class: 'hidden' unless category.new_record?
+%>

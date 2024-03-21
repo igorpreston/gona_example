@@ -1,0 +1,22 @@
+<% content_for :title, "#{order.table&.name} – ##{order.number}" %>
+<% content_for :heading, order.number %>
+
+<%= render layout: 'layouts/modal', locals: {
+  width_class: 'md:max-w-[540px]',
+  position_class: 'items-center',
+  height_class: 'h-auto'
+} do |f| %>
+  <div class="block">
+    <%= render partial: 'storefront/locations/orders/order_items/order_items', locals: {
+      location:,
+      order:,
+      order_items: order.order_items.includes([:item]).where(status: :added),
+      destroy_btn: true
+    } %>
+  </div>
+  <div class="sticky bottom-0 w-full py-2 mt-8 bg-white z-20">
+    <%= button_to location_order_path(location, order), method: :patch, class: 'btn btn-dark w-full btn-md', data: { turbo_submits_with: "Processing...", turbo: false } do %>
+      Add to order
+    <% end %>
+  </div>
+<% end %>

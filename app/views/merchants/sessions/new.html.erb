@@ -1,0 +1,35 @@
+<%= content_for :heading, 'Welcome back' %>
+<%= content_for :subheading do %>
+  <%= t('devise.sessions.new.subheading_html', link: link_to(t('devise.sessions.new.sign_up_link'), new_registration_path(resource_name), class: 'text-blue-600 hover:text-blue-700')) %>
+<% end %>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'grid grid-cols-1 gap-4' }, data: { turbo: false }) do |f| %>
+  <div>
+    <%= f.email_field :email, autofocus: true, autocomplete: 'email', required: true, class: 'input-auth', placeholder: t('devise.sessions.new.email_placeholder') %>
+  </div>
+
+  <div>
+    <%= f.password_field :password, autocomplete: 'current-password', required: true, class: 'input-auth', placeholder: t('devise.sessions.new.password_placeholder') %>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <div class="flex items-center">
+      <%= f.check_box :remember_me, class: 'h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600' %>
+      <%= f.label :remember_me, t('devise.sessions.new.remember_me'), class: 'ml-2 block text-sm text-gray-900' %>
+    </div>
+
+    <div class="text-sm">
+      <%= link_to t('devise.sessions.new.forgot_password'), new_password_path(resource_name), class: 'font-medium text-blue-600 hover:text-blue-600' %>
+    </div>
+  </div>
+  <div class="flex items-center justify-center">
+    <div class="text-sm text-red-600">
+      <p class="alert"><%= alert %></p>
+    </div>
+  </div>
+
+  <div>
+    <%= f.submit t('devise.sessions.new.submit'), class: 'flex w-full justify-center rounded border border-transparent bg-blue-600 p-3 sm:p-4 text-md font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 cursor-pointer' %>
+  </div>
+  <div></div>
+<% end %>

@@ -1,0 +1,10 @@
+en:
+  notifications:
+    order_in_progress:
+      message: "%{organization} is preparing your order!"
+    order_ready:
+      message: "Your order %{number} is ready @ %{organization}"
+    order_cancelled:
+      message: "%{organization} canceled your order. Refund will be issued shortly."
+    order_completed:
+      message: "Thank you for your order! Here is the link to your receipt: [URL]."

@@ -1,0 +1,33 @@
+<div class="card overflow-hidden">
+  <div class="card-body bg-gray-50">
+    <p class="text-xl text-gray-900 leading-normal font-normal">
+      You paid <%= order_user.payment.amount.format %>
+      <span class="text-sm text-gray-500 leading-normal font-normal">
+        (<%= order_user.payment&.status&.humanize %>)
+      </span>
+    </p>
+    <p class="text-sm text-gray-900 leading-normal font-normal mt-1">
+      The server knows the bill is paid. Feel free to head out and don't hesitate to say bye!
+    </p>
+  </div>
+  <% if order_user.payment.paid? %>
+    <div class="card-container bg-gray-100 border-t border-gray-200 transition hover:bg-gray-200">
+      <%= link_to order_order_user_receipt_path(order, order_user, format: :pdf), target: :_blank, class: 'p-4 md:p-6 block' do %>
+        <div class="flex items-center">
+          <div class="shrink grow w-full">
+            <p class="text-base text-gray-900 leading-normal font-normal">
+              Get my receipt
+            </p>
+          </div>
+          <div class="shrink-0 ml-4">
+            <%= icon(
+              Rails.application.config.fa_style,
+              'chevron-right',
+              class: 'text-gray-900 leading-none text-xl'
+            ) %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
